@@ -1,4 +1,4 @@
-let apiHost = "https://qbreader.org/api/";
+const apiHost = "https://qbreader.org/api/";
 
 
 type parameter = {
@@ -7,12 +7,13 @@ type parameter = {
 }
 export async function Pull(endpoint:string, parameters:parameter[],  callback:(e:any) => void):Promise<void> {    
 
-    try {
-        
+	const input = apiHost + endpoint + parameters.reduce((acc, e) => `${acc}${e.key}=${e.val}&`, "/?")
 
-        await fetch(apiHost + endpoint + parameters.reduce((acc, e) => `${acc}${e.key}=${e.val}&`, "/?"))
-            .then(response => { 
-                console.log(response)
+	console.log(input)
+
+	try {
+        await fetch(input)
+            .then(response => {
                 return response.json()
             })
             .then(callback)
@@ -20,10 +21,4 @@ export async function Pull(endpoint:string, parameters:parameter[],  callback:(e
     }catch (e) {
         console.log(e)
     }
-}
-
-export async function test() {
-    let result = await fetch("https://qbreader.org/api/query/?queryString=plasma&searchType=question&")
-
-    console.log(result)
 }

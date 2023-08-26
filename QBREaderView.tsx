@@ -1,13 +1,14 @@
 import { App, ItemView, WorkspaceLeaf } from "obsidian";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { QBReaderView } from "./QBReaderView";
+import { QBReaderMainComponent } from "./react-components/QBReaderMainComponent";
 import { Root, createRoot } from "react-dom/client";
 import { AppContext } from "main";
 
-export const VIEW_TYPE_EXAMPLE = "example-view";
 
-export class ExampleView extends ItemView {
+export const QB_READER_VIEW_TYPE = "qb-reader-view";
+
+export class QBREaderView extends ItemView {
 
   
   root:Root;
@@ -19,7 +20,7 @@ export class ExampleView extends ItemView {
   }
 
   getViewType() {
-    return VIEW_TYPE_EXAMPLE;
+    return QB_READER_VIEW_TYPE;
   }
 
   getDisplayText() {
@@ -30,7 +31,7 @@ export class ExampleView extends ItemView {
     
     this.root.render(
       <AppContext.Provider value = {this.app}>
-        <QBReaderView />
+        <QBReaderMainComponent />
       </AppContext.Provider>
     );
   }

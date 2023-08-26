@@ -6,3 +6,32 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.test-class-name {
+	display: flex;
+	justify-content: space-around;
+}
+
+.white-background {
+	/*background-color: #ffffff;*/
+	padding: 1vh;
+	border-radius: 1.5vh;
+}
+
+.sentence {
+	transition: 0.25s;
+}
+
+.sentence:hover {
+	background-color: #FFFF00;
+	color: black;
+}
+
+.pronoun-replace {
+
+}
