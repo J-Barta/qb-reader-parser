@@ -1,11 +1,10 @@
 {
 	"id": "obsidian-qb-reader",
 	"name": "Obsidian QB Reader",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
-	"description": "This plugin parses clues for answerlines on QB Reader for quick creation of Anki notecards.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
-	"isDesktopOnly": false
+	"description": "Parse tossups from QB Reader into individual clues to send to Anki.",
+	"author": "Jedi_4",
+	"authorUrl": "https://github.com/J-Barta",
+	"isDesktopOnly": true
 }

@@ -1,10 +1,10 @@
-import { App, MarkdownView, Modal, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import { QBREaderView, QB_READER_VIEW_TYPE } from "QBREaderView";
 export const AppContext = React.createContext<App | undefined>(undefined);
 
 //TODO: Parse out unnecessary whitespace
+//TODO: Fix rando errors
 interface QBReaderSettings {
 	mySetting: string;
 }
@@ -31,7 +31,6 @@ export default class QBReaderPlugin extends Plugin {
 			name: "QB Reader",
 			checkCallback: (checking:boolean) => {
 
-				console.log(this.app.workspace.getActiveFile())
 				if(!checking) {
 					this.activateView()
 				}

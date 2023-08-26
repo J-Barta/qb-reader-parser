@@ -42,7 +42,6 @@ export default function TossupDisplay(props: {tossup:Tossup, file:TFile}) {
 
 		const content = await vault.read(props.file);
 
-		console.log(content)
 		// Append content (use \n for line break)
 		const newContent = content + "\n\n"
 			+sentence.text.replace(sentence.pronoun, `==${rawPrimaryAnswer}::${sentence.pronoun}==`);

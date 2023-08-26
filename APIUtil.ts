@@ -9,8 +9,6 @@ export async function Pull(endpoint:string, parameters:parameter[],  callback:(e
 
 	const input = apiHost + endpoint + parameters.reduce((acc, e) => `${acc}${e.key}=${e.val}&`, "/?")
 
-	console.log(input)
-
 	try {
         await fetch(input)
             .then(response => {
@@ -19,6 +17,5 @@ export async function Pull(endpoint:string, parameters:parameter[],  callback:(e
             .then(callback)
             .catch(() => {})
     }catch (e) {
-        console.log(e)
     }
 }
