@@ -178,6 +178,7 @@ export function SubjectSelector(props: {upliftActiveCategories:(val:string[]) =>
 						aria-label="categories"
 					>
 						{categories.map(e =>
+							// @ts-ignore
 							<ToggleButton key={e.name} value={e.name} color={e.color}>{e.name}</ToggleButton>
 						)}
 					</ToggleButtonGroup>
@@ -192,6 +193,7 @@ export function SubjectSelector(props: {upliftActiveCategories:(val:string[]) =>
 						aria-label="subcategories"
 					>
 						{availableSubcats.map(e =>
+							// @ts-ignore
 							<ToggleButton key={e.name} value={e.name} color={e.color}>{e.name}</ToggleButton>
 						)}
 					</ToggleButtonGroup>
