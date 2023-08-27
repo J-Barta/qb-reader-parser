@@ -3,7 +3,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { QBReaderMainComponent } from "./react-components/QBReaderMainComponent";
 import { Root, createRoot } from "react-dom/client";
-import { AppContext } from "main";
+import {AppContext, QBReaderSettings} from "main";
 
 
 export const QB_READER_VIEW_TYPE = "qb-reader-view";
@@ -12,11 +12,14 @@ export class QBREaderView extends ItemView {
 
   
   root:Root;
+  settings:QBReaderSettings
 
-  constructor(leaf: WorkspaceLeaf) {
+  constructor(leaf: WorkspaceLeaf, settings:QBReaderSettings) {
     super(leaf);
 
     this.root = createRoot(this.containerEl.children[1]);
+
+	this.settings = settings;
   }
 
   getViewType() {
@@ -31,7 +34,7 @@ export class QBREaderView extends ItemView {
     
     this.root.render(
       <AppContext.Provider value = {this.app}>
-        <QBReaderMainComponent />
+        <QBReaderMainComponent settings={this.settings}/>
       </AppContext.Provider>
     );
   }

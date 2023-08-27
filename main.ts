@@ -1,22 +1,28 @@
-import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import {App, Plugin, PluginSettingTab, Setting} from 'obsidian';
 import * as React from "react";
 import { QBREaderView, QB_READER_VIEW_TYPE } from "QBREaderView";
+import {categories} from "./react-components/Categories";
 export const AppContext = React.createContext<App | undefined>(undefined);
 
 //TODO: Parse out unnecessary whitespace
-//TODO: Fix rando errors
 //TODO: Allow config of all configurable things in the search
 //TODO: Settings for cloze format
-//TODO: Settings for default settings
-//TODO: Make UI not look crappy
+//TODO: Make UI not look crappy (switch to semantic)
 //TODO: Bonus-ing?
+//TODO: make settings tab not just a giant list:(
+//TODO: Allow enter key to search
 
-interface QBReaderSettings {
-	mySetting: string;
+export interface QBReaderSettings {
+	activeCats: string[];
+	activeSubcats: string[];
 }
 
-const DEFAULT_SETTINGS: QBReaderSettings = {
-	mySetting: 'default'
+const DEFAULT_SETTINGS: Partial<QBReaderSettings> = {
+	activeCats: categories.map(e => e.name),
+	activeSubcats: categories.reduce((acc:string[], e) => {
+		acc.push(...e.subcats)
+		return acc
+	}, [])
 }
 
 export default class QBReaderPlugin extends Plugin {
@@ -27,7 +33,7 @@ export default class QBReaderPlugin extends Plugin {
 
 		this.registerView(
 			QB_READER_VIEW_TYPE,
-			(leaf) => new QBREaderView(leaf)
+			(leaf) => new QBREaderView(leaf, this.settings)
 		)
 
 
@@ -98,15 +104,48 @@ class SampleSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
+		categories.forEach(e => {
+				new Setting(containerEl)
+					.setName(e.name)
+					.addToggle(toggle => toggle
+						.setValue(this.plugin.settings.activeCats.includes(e.name))
+						.onChange(async (value) => {
+							if(value) {
+								this.plugin.settings.activeCats.push(e.name)
+								this.plugin.settings.activeSubcats.push(...e.subcats)
+							} else {
+								this.plugin.settings.activeCats = this.plugin.settings.activeCats.filter(ele => {
+									return ele !== e.name
+								})
+
+								this.plugin.settings.activeSubcats = this.plugin.settings.activeSubcats.filter(ele => {
+									return !e.subcats.includes(ele)
+								})
+							}
+							await this.plugin.saveSettings()
+						})
+					)
+
+				e.subcats.forEach(sub => {
+					new Setting(containerEl)
+						.setName(sub)
+						.addToggle(toggle => toggle
+							.setDisabled(!this.plugin.settings.activeCats.includes(e.name))
+							.setValue(this.plugin.settings.activeSubcats.includes(sub))
+							.onChange(async (value) => {
+								console.log("trying to change sub")
+								if(value) {
+									this.plugin.settings.activeSubcats.push(sub)
+								} else {
+									this.plugin.settings.activeSubcats = this.plugin.settings.activeSubcats.filter(ele => {
+										return ele !== e.name
+									})
+								}
+								await this.plugin.saveSettings()
+							})
+						)
+				})
+		})
+
 	}
 }

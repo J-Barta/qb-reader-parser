@@ -50,7 +50,7 @@ export default function TossupDisplay(props: {tossup:Tossup, file:TFile}) {
 	}
 
 	return <div>
-		<p><b>{props.tossup.category}</b> - {props.tossup.subcat}</p>
+		<p><b>{props.tossup.category}</b> - {props.tossup.subcat} - {props.tossup.setName} - {props.tossup.difficulty}</p>
 		<p>
 			{sentences.map(e =>
 				<span

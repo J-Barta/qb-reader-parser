@@ -10,6 +10,8 @@ import {
 
 import "../styles.css"
 import {useEffect} from "react";
+import {categories, Category} from "./Categories";
+import {QBReaderSettings} from "../main";
 
 // Augment the palette to include a violet color
 declare module '@mui/material/styles' {
@@ -80,63 +82,42 @@ const theme = createTheme({
 	},
 });
 
-type category = {
-	name:string,
-	color: string,
-	subcats:string[]
-}
 
-
-export function SubjectSelector(props: {upliftActiveCategories:(val:string[]) => void, upliftActiveSubcats:(val:string[]) => void}) {
-
-	const categories:category[] = [
-		{name: "Literature", color: "blue", subcats: [
-				"American Literature", "British Literature", "Classical Literature", "European Literature", "World Literature"
-			]},
-		{name: "History", color: "green", subcats: [
-				"American History", "Ancient History", "European History", "World History", "Other History"
-			]},
-		{name: "Science", color: "red", subcats: [
-				"Biology", "Chemistry", "Physics", "Math", "Other Science"
-			]},
-		{name: "Fine Arts", color: "orange", subcats: [
-				"Visual Fine Arts", "Auditory Fine Arts", "Other Fine Arts"
-			]},
-		{name: "Religion", color: "secondary", subcats: []},
-		{name: "Mythology", color: "secondary", subcats: []},
-		{name: "Philosophy", color: "secondary", subcats: []},
-		{name: "Social Science", color: "secondary", subcats: []},
-		{name: "Current Events", color: "secondary", subcats: []},
-		{name: "Geography", color: "secondary", subcats: []},
-		{name: "Other Academic", color: "secondary", subcats: []},
-		{name: "Trash", color: "secondary", subcats: []},
-	]
+export function SubjectSelector(props: {
+	settings:QBReaderSettings,
+	upliftActiveCategories:(val:string[]) => void,
+	upliftActiveSubcats:(val:string[]) => void
+}) {
 
 	const [activeCategories, setActiveCategories] =
-		React.useState(() => ['Science', 'Mythology', 'Religion']);
+		React.useState(() => props.settings.activeCats);
 
-	const [availableSubcats, setAvailableSubcats] = React.useState<category[]>([])
+	const [availableSubcats, setAvailableSubcats] = React.useState<Category[]>([])
 
 
 	React.useEffect(() => {
-		const currentSubcats:category[] = categories
+		const nowAvailableSubcats:Category[] = categories
 			.filter(e => activeCategories.includes(e.name))
 			.reduce(
-				(acc:category[], e) => {
+				(acc:Category[], e) => {
 					acc.push(...e.subcats.map(subcat =>
 						{return {name: subcat, color: e.color, subcats: []}})
 					)
 					return acc
 				}, []);
 
-		const availableSubcatNames = availableSubcats.map(e => e.name)
-		const newSubcatsNames = currentSubcats.filter(e =>
-			!availableSubcatNames.includes(e.name)).map(e => e.name)
+		const nowAvailableSubcatNames:string[] = nowAvailableSubcats.map(e => e.name)
 
-		setAvailableSubcats(currentSubcats)
+		const currentAvailableSubcatNames = availableSubcats.map(e => e.name)
+		//Subcats that weren't available before
+		const newAvailableSubcatNames = nowAvailableSubcats.filter(e =>
+			!currentAvailableSubcatNames.includes(e.name)).map(e => e.name)
 
-		const newActiveSubcats = activeSubcats.filter((e) => availableSubcatNames.includes(e))
-		newActiveSubcats.push(...newSubcatsNames)
+		setAvailableSubcats(nowAvailableSubcats)
+
+		const newActiveSubcats = activeSubcats.filter((e) => nowAvailableSubcatNames.includes(e))
+		newActiveSubcats.push(...newAvailableSubcatNames)
+
 		setActiveSubcats(newActiveSubcats)
 
 		props.upliftActiveCategories(activeCategories)
@@ -144,7 +125,7 @@ export function SubjectSelector(props: {upliftActiveCategories:(val:string[]) =>
 	}, [activeCategories])
 
 	const [activeSubcats, setActiveSubcats] =
-		React.useState(() => availableSubcats.map(e => e.name))
+		React.useState(() => props.settings.activeSubcats)
 
 	const handleFormat = (
 		event: React.MouseEvent<HTMLElement>,
@@ -162,7 +143,7 @@ export function SubjectSelector(props: {upliftActiveCategories:(val:string[]) =>
 
 	useEffect(() => {
 		props.upliftActiveSubcats(activeSubcats)
-	}, activeSubcats)
+	}, [activeSubcats])
 
 	return (
 		<ThemeProvider theme={theme}>
