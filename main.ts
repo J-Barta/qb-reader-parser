@@ -5,6 +5,12 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 
 //TODO: Parse out unnecessary whitespace
 //TODO: Fix rando errors
+//TODO: Allow config of all configurable things in the search
+//TODO: Settings for cloze format
+//TODO: Settings for default settings
+//TODO: Make UI not look crappy
+//TODO: Bonus-ing?
+
 interface QBReaderSettings {
 	mySetting: string;
 }
