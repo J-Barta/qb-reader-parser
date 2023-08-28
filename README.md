@@ -9,8 +9,8 @@ Automatically parse tossups from QB Reader into a format readable by the [Obsidi
   - Enable the plugin and go to its settings
   - Set the deck for your obsidian cards to go to
   - Enable Cloze Paragraph styling - See [To Use](##To Use) section 
-- Download `main.js`, `manifest.json`, and `styles.css` from the latest [Release](https://github.com/J-Barta/obsidian-qb-reader/releases).
-  - Place these files into a single folder labeled `obsidian-qb-reader`
+- `obsidian-qb-reader.zip` from the latest [Release](https://github.com/J-Barta/obsidian-qb-reader/releases).
+  - Extract the folder and locate its inner folder (also called `obsidian-qb-reader.zip`)
   - Move this folder into `{Your Obsidian Vault}/.obsidian/plugins/`
   - Restart Obsidian (probably).
   - Go to your community plugins tab and enable Obsidian QB Reader

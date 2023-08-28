@@ -23,7 +23,7 @@ jobs:
                   npm run build
 
             # Package the required files into a zip
-            - name: Package
+            - name: Package Zip
               run: |
                   mkdir ${{ github.event.repository.name }}
                   cp main.js manifest.json styles.css README.md ${{ github.event.repository.name }}
