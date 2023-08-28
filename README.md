@@ -3,11 +3,13 @@
 Automatically parse tossups from QB Reader into a format readable by the [Obsidian_to_Anki](https://github.com/Pseudonium/Obsidian_to_Anki) plugin.
 
 ## Installation
-- Download and install Obsidian
-- Download the [AnkiConnect](https://ankiweb.net/shared/info/2055492159) plugin in Anki (id `2055492159`)
+- Download and install [Obsidian](https://obsidian.md)
+- Download the [AnkiConnect](https://ankiweb.net/shared/info/2055492159) Add-on in Anki (id `2055492159`)
 - Enable Community Plugins in Obsidian and install the Obsidian_to_Anki plugin
   - Enable the plugin and go to its settings
   - Set the deck for your obsidian cards to go to
+    - Located under the "Defaults" section in options for the plugin
+    - Copy the deck name and path (click the settings icon next to your deck --> rename, copy your)
   - Enable Cloze Paragraph styling - See [To Use](##To Use) section 
 - `obsidian-qb-reader.zip` from the latest [Release](https://github.com/J-Barta/obsidian-qb-reader/releases).
   - Extract the folder and locate its inner folder (also called `obsidian-qb-reader.zip`)
