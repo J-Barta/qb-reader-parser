@@ -1,7 +1,7 @@
 import { App, ItemView, WorkspaceLeaf } from "obsidian";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { QBReaderMainComponent } from "./react-components/QBReaderMainComponent";
+import { QBReaderMainComponent } from "./src/react-components/QBReaderMainComponent";
 import { Root, createRoot } from "react-dom/client";
 import {AppContext, QBReaderSettings} from "main";
 

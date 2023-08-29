@@ -3,7 +3,7 @@ import {Tossup} from "./QBReaderMainComponent";
 import {Popover, Typography} from "@mui/material";
 import {useState} from "react";
 import {TFile} from "obsidian";
-import {useApp} from "../QBREaderView";
+import {useApp} from "../../QBREaderView";
 
 type sentence = {
 	text:string,

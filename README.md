@@ -11,7 +11,7 @@ Automatically parse tossups from QB Reader into a format readable by the [Obsidi
     - Located under the "Defaults" section in options for the plugin
     - Copy the deck name and path (click the settings icon next to your deck --> rename, copy your)
   - Enable Cloze Paragraph styling - See To Use section 
-- `obsidian-qb-reader.zip` from the latest [Release](https://github.com/J-Barta/obsidian-qb-reader/releases).
+- `obsidian-qb-reader.zip` from the latest [Release](https://github.com/J-Barta/obsidian-qb-reader/releases/latest).
   - Extract the folder and locate its inner folder (also called `obsidian-qb-reader.zip`)
   - Move this folder into `{Your Obsidian Vault}/.obsidian/plugins/`
   - Restart Obsidian (probably).

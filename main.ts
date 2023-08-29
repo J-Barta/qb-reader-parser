@@ -1,7 +1,7 @@
 import {App, Plugin, PluginSettingTab, Setting} from 'obsidian';
 import * as React from "react";
 import { QBREaderView, QB_READER_VIEW_TYPE } from "QBREaderView";
-import {categories} from "./react-components/Categories";
+import {categories} from "./src/react-components/Categories";
 export const AppContext = React.createContext<App | undefined>(undefined);
 
 //TODO: Parse out unnecessary whitespace
@@ -9,7 +9,7 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Settings for cloze format
 //TODO: Make UI not look crappy (switch to semantic)
 //TODO: Bonus-ing?
-//TODO: make settings tab not just a giant list:(
+//TODO: make settings tab not just a giant list :(
 //TODO: Allow enter key to search
 
 export interface QBReaderSettings {
@@ -53,16 +53,7 @@ export default class QBReaderPlugin extends Plugin {
 
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
-
-		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
-		// Using this function will automatically remove the event listener when this plugin is disabled.
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			console.log('click', evt);
-		});
-
-		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+		this.addSettingTab(new QBReaderSettingsTab(this.app, this));
 	}
 
 	onunload() {
@@ -91,7 +82,7 @@ export default class QBReaderPlugin extends Plugin {
 	}
 }
 
-class SampleSettingTab extends PluginSettingTab {
+class QBReaderSettingsTab extends PluginSettingTab {
 	plugin: QBReaderPlugin;
 
 	constructor(app: App, plugin: QBReaderPlugin) {
@@ -133,7 +124,6 @@ class SampleSettingTab extends PluginSettingTab {
 							.setDisabled(!this.plugin.settings.activeCats.includes(e.name))
 							.setValue(this.plugin.settings.activeSubcats.includes(sub))
 							.onChange(async (value) => {
-								console.log("trying to change sub")
 								if(value) {
 									this.plugin.settings.activeSubcats.push(sub)
 								} else {

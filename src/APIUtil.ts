@@ -16,6 +16,5 @@ export async function Pull(endpoint:string, parameters:parameter[],  callback:(e
             })
             .then(callback)
             .catch(() => {})
-    }catch (e) {
-    }
+    }catch (e) { /* empty */ }
 }

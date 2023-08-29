@@ -8,10 +8,10 @@ import {
 	ToggleButtonGroup
 } from "@mui/material";
 
-import "../styles.css"
+import "../../styles.css"
 import {useEffect} from "react";
 import {categories, Category} from "./Categories";
-import {QBReaderSettings} from "../main";
+import {QBReaderSettings} from "../../main";
 
 // Augment the palette to include a violet color
 declare module '@mui/material/styles' {

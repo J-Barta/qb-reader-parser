@@ -1,4 +1,4 @@
-import { Pull } from "APIUtil";
+import { Pull } from "src/APIUtil";
 import { useApp } from "QBREaderView";
 import { TFile } from "obsidian";
 import * as React from "react";
@@ -6,7 +6,7 @@ import {SubjectSelector} from "./SubjectSelector";
 import {Button, MenuItem, Select, SelectChangeEvent, TextField} from "@mui/material";
 import {useState} from "react";
 import TossupDisplay from "./TossupDisplay";
-import {QBReaderSettings} from "../main";
+import {QBReaderSettings} from "../../main";
 
 
 export type Tossup = {
