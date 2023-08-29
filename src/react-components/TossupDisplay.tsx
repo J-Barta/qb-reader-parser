@@ -13,7 +13,7 @@ export default function TossupDisplay(props: {tossup:Tossup, file:TFile}) {
 
 	const {vault} = useApp()!;
 
-	const sentenceSplitter = /[^.!?]*((?:[tT]his|[tT]hese) \w+)[^.!?]*[.!?]["”]*/g;
+	const sentenceSplitter = /[^.!?]*((?:[tT]his|[tT]hese) [\w-]+)[^.!?]*[.!?]["”]*/g;
 
 	const sentences:sentence[] = [...props.tossup.question.matchAll(sentenceSplitter)]
 		.map((e):sentence => {return {text: e[0], pronoun: e[1]}});

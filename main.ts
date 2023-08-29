@@ -10,11 +10,10 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Make UI not look crappy (switch to semantic)
 //TODO: Bonus-ing?
 //TODO: make settings tab not just a giant list :(
-//TODO: Allow enter key to search
-//TODO: Ctrl + F
 //TODO: Jump to top button
 //TODO: Show loading icon when loading questions
-//TODO: Fix parsing for things like: "this non-xyz"
+//TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
+//TODO: Ctrl + F (scrapped for now)
 
 export interface QBReaderSettings {
 	activeCats: string[];
