@@ -72,7 +72,13 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 		)
 	}
 
-    return <div>
+    return <div
+		onKeyDown={(e) => {
+			if (e.key === "Enter") {
+				pullQuestions();
+			}
+		}}
+		>
         <h1>{file.basename} QB Reader Import</h1>
 
 		<div className={"white-background"}>
