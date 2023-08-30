@@ -4,6 +4,7 @@ import {Popover, Typography} from "@mui/material";
 import {useState} from "react";
 import {TFile} from "obsidian";
 import {useApp} from "../../QBREaderView";
+import {BrillPOSTagger, Lexicon, RuleSet, SentenceTokenizer} from "natural";
 
 type sentence = {
 	text:string,
@@ -13,10 +14,29 @@ export default function TossupDisplay(props: {tossup:Tossup, file:TFile}) {
 
 	const {vault} = useApp()!;
 
-	const sentenceSplitter = /[^.!?]*((?:[tT]his|[tT]hese) [\w-]+)[^.!?]*[.!?]["”]*/g;
+	const sentenceSplitter = /[^.!?]*((?:[tT]his|[tT]hese) ([\w-]+))[^.!?]*[.!?]["”]*/g;
 
 	const sentences:sentence[] = [...props.tossup.question.matchAll(sentenceSplitter)]
-		.map((e):sentence => {return {text: e[0], pronoun: e[1]}});
+		.map((e):sentence => {
+
+			const outputWord = e[2]
+
+			const language = "EN"
+			const defaultCategory = 'N';
+			const defaultCategoryCapitalized = 'NNP';
+
+			const lexicon = new Lexicon(language, defaultCategory, defaultCategoryCapitalized);
+			const ruleSet = new RuleSet('EN');
+			const tagger = new BrillPOSTagger(lexicon, ruleSet);
+
+			const sentence = tagger.tag([outputWord])
+
+			console.log(outputWord + ":" + sentence.taggedWords[0].tag)
+
+			const type = sentence.taggedWords[0].tag
+
+			return {text: e[0], pronoun: e[1] + `: ${sentence.taggedWords[0].tag}`}
+		});
 
 
 	const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);

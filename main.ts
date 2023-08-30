@@ -12,7 +12,6 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: make settings tab not just a giant list :(
 //TODO: Jump to top button
 //TODO: Show loading icon when loading questions
-//TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
 //TODO: Ctrl + F (scrapped for now)
 
 export interface QBReaderSettings {
