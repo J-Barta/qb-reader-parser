@@ -22,6 +22,6 @@
   "include": [
     "**/*.ts"
 ,
-    "QBREaderView.tsx"
+    "src/QBREaderView.tsx"
   ]
 }

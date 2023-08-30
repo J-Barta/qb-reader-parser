@@ -1,6 +1,6 @@
 import {App, Plugin, PluginSettingTab, Setting} from 'obsidian';
 import * as React from "react";
-import { QBREaderView, QB_READER_VIEW_TYPE } from "QBREaderView";
+import { QBREaderView, QB_READER_VIEW_TYPE } from "src/QBREaderView";
 import {categories} from "./src/react-components/Categories";
 export const AppContext = React.createContext<App | undefined>(undefined);
 

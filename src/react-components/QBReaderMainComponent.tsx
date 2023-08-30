@@ -1,5 +1,5 @@
 import { Pull } from "src/APIUtil";
-import { useApp } from "QBREaderView";
+import { useApp } from "src/QBREaderView";
 import { TFile } from "obsidian";
 import * as React from "react";
 import {SubjectSelector} from "./SubjectSelector";
@@ -7,6 +7,7 @@ import {Button, MenuItem, Select, SelectChangeEvent, TextField} from "@mui/mater
 import {useState} from "react";
 import TossupDisplay from "./TossupDisplay";
 import {QBReaderSettings} from "../../main";
+import {Popup} from "semantic-ui-react";
 
 
 export type Tossup = {
@@ -79,7 +80,9 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 			}
 		}}
 		>
-        <h1>{file.basename} QB Reader Import</h1>
+		<Popup trigger={
+			<h1>{file.basename} QB Reader Import</h1>
+		} content={"hello"}/>
 
 		<div className={"white-background"}>
 			<TextField
