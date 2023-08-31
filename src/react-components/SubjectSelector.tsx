@@ -2,7 +2,7 @@ import * as React from "react";
 
 import "../../styles.css"
 import {useEffect} from "react";
-import {categories, Category} from "./Categories";
+import {categories, Category} from "../Categories";
 import {QBReaderSettings} from "../../main";
 import {SubjectButton} from "./ui/SubjectButton";
 
@@ -68,6 +68,7 @@ export function SubjectSelector(props: {
 							key={e.name}
 							text={e.name}
 							color={e.color}
+							settings={props.settings}
 							onClick={() => {
 
 								if(!active) {
@@ -96,6 +97,7 @@ export function SubjectSelector(props: {
 							key={e.name}
 							text={e.name}
 							color={e.color}
+							settings={props.settings}
 							onClick={() => {
 
 								if(!active) {

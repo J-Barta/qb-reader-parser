@@ -1,7 +1,7 @@
 import {App, Plugin, PluginSettingTab, Setting} from 'obsidian';
 import * as React from "react";
 import { QBREaderView, QB_READER_VIEW_TYPE } from "src/QBREaderView";
-import {categories} from "./src/react-components/Categories";
+import {categories} from "./src/Categories";
 export const AppContext = React.createContext<App | undefined>(undefined);
 
 //TODO: Parse out unnecessary whitespace
@@ -11,15 +11,17 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Jump to top button
 //TODO: Show loading icon when loading questions
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
-//TODO: Optional disable of category color text
 //TODO: Ctrl + F (scrapped for now)
+//TODO: Collapsable categories
 
 export interface QBReaderSettings {
 	activeCats: string[];
+	disableCatColors: boolean;
 }
 
 const DEFAULT_SETTINGS: Partial<QBReaderSettings> = {
 	activeCats: categories.map(e => e.name),
+	disableCatColors: false
 }
 
 export default class QBReaderPlugin extends Plugin {
@@ -91,6 +93,18 @@ class QBReaderSettingsTab extends PluginSettingTab {
 		const {containerEl} = this;
 
 		containerEl.empty();
+
+		new Setting(containerEl)
+			.setName("Disable Category Colors")
+			.setTooltip("For themes that make colored text hard to read")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.disableCatColors)
+				.onChange(async (value) => {
+					this.plugin.settings.disableCatColors = value;
+
+					await this.plugin.saveSettings();
+				})
+			)
 
 		categories.forEach(e => {
 				new Setting(containerEl)
