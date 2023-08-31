@@ -59,7 +59,7 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 				{key: "searchType", val: searchType},
 				{key: "categories", val: activeCategories.reduce((acc, e) => acc+","+e, "")},
 				{key: "subcategories", val: activeSubcats.reduce((acc, e) => acc+","+e, "")},
-				{key: "difficulty", val: diffsToUse.reduce((acc, e) => acc+","+e, "")}
+				{key: "difficulties", val: diffsToUse.reduce((acc, e) => acc+","+e, "")}
 			], (data) => {
 				const questionContent:Tossup[] = data.tossups.questionArray.map((e:any):Tossup => {
 					return {

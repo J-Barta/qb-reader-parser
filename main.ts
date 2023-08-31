@@ -5,7 +5,6 @@ import {categories} from "./src/Categories";
 export const AppContext = React.createContext<App | undefined>(undefined);
 
 //TODO: Parse out unnecessary whitespace
-//TODO: Allow config of all configurable things in the search
 //TODO: Settings for cloze format
 //TODO: Bonus-ing?
 //TODO: Jump to top button
