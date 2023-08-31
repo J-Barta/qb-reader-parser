@@ -48,8 +48,7 @@ export function SubjectSelector(props: {
 
 	}, [activeCategories])
 
-	const [activeSubcats, setActiveSubcats] =
-		React.useState(() => props.settings.activeSubcats)
+	const [activeSubcats, setActiveSubcats] = React.useState<string[]>([])
 
 	useEffect(() => {
 		props.upliftActiveSubcats(activeSubcats)

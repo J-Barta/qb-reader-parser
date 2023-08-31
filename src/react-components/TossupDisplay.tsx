@@ -1,6 +1,5 @@
 import * as React from "react";
 import {Tossup} from "./QBReaderMainComponent";
-import {Popover, Typography} from "@mui/material";
 import {useState} from "react";
 import {TFile} from "obsidian";
 import {useApp} from "../QBREaderView";
@@ -19,23 +18,22 @@ export default function TossupDisplay(props: {tossup:Tossup, file:TFile}) {
 		.map((e):sentence => {return {text: e[0], pronoun: e[1]}});
 
 
-	const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
 	const [activeSentence, setActiveSentence]
 		= useState<sentence>({text:"", pronoun:""})
 
-	const open = Boolean(anchorEl);
+	const [popupOpen, setPopupOpen] = useState(false);
 
 	const rawAnswerParser = /[^[]*/g;
 	const rawPrimaryAnswer = [...props.tossup.rawAnswer.matchAll(rawAnswerParser)][0][0]
 
-	const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, sentence:sentence) => {
-		setAnchorEl(event.currentTarget);
+	const handlePopupOpen = (event: React.MouseEvent<HTMLElement>, sentence:sentence) => {
+		setPopupOpen(true);
 		setActiveSentence(sentence)
 	};
 
-	const handlePopoverClose = () => {
-		setAnchorEl(null);
+	const handlePopupClose = () => {
+		setPopupOpen(false);
 	};
 
 	const handleSentenceClick = async (sentence:sentence) => {
@@ -54,42 +52,29 @@ export default function TossupDisplay(props: {tossup:Tossup, file:TFile}) {
 		<p>
 			{sentences.map(e =>
 				<span
-					key={e.text} className={"sentence"}
-					onMouseEnter={(event) => handlePopoverOpen(event, e)}
-					onMouseLeave={handlePopoverClose}
+					key={e.text}
+					className="popup sentence"
+					onMouseEnter={(event) => handlePopupOpen(event, e)}
+					onMouseLeave={() => handlePopupClose()}
 					onClick={() => handleSentenceClick(e)}
 				>
+
 					{e.text.substring(0, e.text.indexOf(e.pronoun))}
-					<span className={"pronoun-replace"}>
-						<b>
-							{e.pronoun}
-						</b>
-					</span>
-					{e.text.substring(e.text.indexOf(e.pronoun)+e.pronoun.length)}
+						<span className={"pronoun-replace"}>
+							<b>
+								{e.pronoun}
+							</b>
+						</span>
+						{e.text.substring(e.text.indexOf(e.pronoun)+e.pronoun.length)}
+
+					{/*The Actual popup*/}
+					<span className={`popuptext ${popupOpen && activeSentence.text === e.text ? "show" : ""}`} id="myPopup">{activeSentence.pronoun} ➡ {rawPrimaryAnswer}</span>
 				</span>
+
+
 			)}
 		</p>
 
-		<Popover
-			id="mouse-over-popover"
-			sx={{
-				pointerEvents: 'none',
-			}}
-			open={open}
-			anchorEl={anchorEl}
-			anchorOrigin={{
-				vertical: 'bottom',
-				horizontal: 'left',
-			}}
-			transformOrigin={{
-				vertical: 'top',
-				horizontal: 'left',
-			}}
-			onClose={handlePopoverClose}
-			disableRestoreFocus
-		>
-			<Typography sx={{ p: 1 }}>{activeSentence.pronoun} ➡ {rawPrimaryAnswer}</Typography>
-		</Popover>
 		<p><b>Answer:</b> <span dangerouslySetInnerHTML={{__html: props.tossup.answer}}/></p>
 		<hr/>
 	</div>

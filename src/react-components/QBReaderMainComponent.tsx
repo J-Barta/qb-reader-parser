@@ -3,7 +3,6 @@ import { useApp } from "src/QBREaderView";
 import { TFile } from "obsidian";
 import * as React from "react";
 import {SubjectSelector} from "./SubjectSelector";
-import {Button, MenuItem, Select, SelectChangeEvent, TextField} from "@mui/material";
 import {useState} from "react";
 import TossupDisplay from "./TossupDisplay";
 import {QBReaderSettings} from "../../main";
@@ -25,7 +24,7 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 	const [questionQuery, setQuestionQuery] = useState("");
 
 	const [activeCategories, setActiveCategories] = useState<string[]>(props.settings.activeCats)
-	const [activeSubcats, setActiveSubcats] = useState<string[]>(props.settings.activeSubcats)
+	const [activeSubcats, setActiveSubcats] = useState<string[]>([])
 
 	const [searchType, setSearchType] = useState("all")
 
@@ -73,6 +72,7 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 
     return <div
 		onKeyDown={(e) => {
+			console.log("keydown enter?")
 			if (e.key === "Enter") {
 				pullQuestions();
 			}
