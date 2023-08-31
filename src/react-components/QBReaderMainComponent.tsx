@@ -7,8 +7,6 @@ import {Button, MenuItem, Select, SelectChangeEvent, TextField} from "@mui/mater
 import {useState} from "react";
 import TossupDisplay from "./TossupDisplay";
 import {QBReaderSettings} from "../../main";
-import {Popup} from "semantic-ui-react";
-
 
 export type Tossup = {
 	question:string,
@@ -80,33 +78,35 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 			}
 		}}
 		>
-		<Popup trigger={
-			<h1>{file.basename} QB Reader Import</h1>
-		} content={"hello"}/>
+
+		<h1>{file.basename} QB Reader Import</h1>
 
 		<div className={"white-background"}>
-			<TextField
-				id={"standard-basic"}
-				label={"Search Query"}
-				variant={"standard"}
+
+			<input
+				spellCheck={false}
+				type={"text"}
+				placeholder={"Search Query"}
 				value={questionQuery}
 				onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-					setQuestionQuery(event.target.value);
-				}}/>
-			<Select
-				value={searchType}
-				label={"Search Type"}
-				onChange={(event:SelectChangeEvent) => setSearchType(event.target.value as string)}
-			>
-				<MenuItem value={"all"}>All Text</MenuItem>
-				<MenuItem value={"question"}>Question</MenuItem>
-				<MenuItem value={"answer"}>Answer</MenuItem>
+					setQuestionQuery(event.target.value)
+				}}
+			/>
 
-			</Select>
+			<p>Search Type</p>
+			<select
+				className={"dropdown"}
+				onChange={(e) => setSearchType(e.target.value)}
+				value={searchType}
+			>
+				<option value={"all"}>All Text</option>
+				<option value={"question"}>Question</option>
+				<option value={"answer"}>Answer</option>
+			</select>
 
 			<SubjectSelector settings={props.settings} upliftActiveCategories={setActiveCategories} upliftActiveSubcats={setActiveSubcats}/>
 
-			<Button onClick={pullQuestions}>Search</Button>
+			<button className={"mod-cta"} onClick={pullQuestions}>Search</button>
 		</div>
 		<div>
 			{

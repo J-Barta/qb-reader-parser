@@ -14,7 +14,7 @@ export const categories:Category[] = [
 	{name: "Science", color: "red", subcats: [
 			"Biology", "Chemistry", "Physics", "Math", "Other Science"
 		]},
-	{name: "Fine Arts", color: "orange", subcats: [
+	{name: "Fine Arts", color: "chocolate", subcats: [
 			"Visual Fine Arts", "Auditory Fine Arts", "Other Fine Arts"
 		]},
 	{name: "Religion", color: "secondary", subcats: []},
