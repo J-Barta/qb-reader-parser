@@ -12,7 +12,6 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Show loading icon when loading questions
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
 //TODO: Ctrl + F (scrapped for now)
-//TODO: Collapsable categories
 
 export interface QBReaderSettings {
 	activeCats: string[];

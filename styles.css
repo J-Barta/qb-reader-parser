@@ -1,3 +1,7 @@
+.main-container {
+	/*overflow-x: hidden;*/
+}
+
 .cat-selector-container {
 	display: flex;
 	justify-content: space-around;
@@ -11,9 +15,21 @@
 	height: 0;
 }
 
-.white-background {
+.input-container {
 	padding: 1vh;
 	border-radius: 1.5vh;
+}
+
+.input-container .query {
+	width: 100%;
+}
+
+.input-container .input-row {
+	display: flex;
+	position: relative;
+	width: 100%;
+	justify-content: center;
+	overflow: visible;
 }
 
 .sentence {
@@ -41,6 +57,53 @@
 	transition: 0.1s;
 }
 
+.difficulty-selector {
+	display: flex;
+	height: 3vh;
+
+	transition: 0.25s;
+}
+
+.difficulty-selector input {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.difficulty-selector p {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.difficulty-container {
+	position: relative;
+}
+
+.difficulty-dropdown {
+	position: absolute;
+	width: 15vw;
+	height: 30vh;
+	transition: 0.25s;
+
+	overflow: hidden;
+
+	background-color: #43465a;
+	border-radius: 6px;
+
+}
+
+.diff-drop-inactive {
+	height: 0;
+}
+
+
+.diff-item-active {
+	background-color: #284552;
+}
+
+.toggle-button {
+	transition: 0.25s;
+}
+
 
 
 /*Popup stuff */
@@ -65,8 +128,8 @@
 	position: absolute;
 	z-index: 1;
 	bottom: 125%;
-	/*left: 50%;*/
-	margin-left: -80px;
+	left: 50%;
+	margin-left: -160px;
 }
 
 /* Popup arrow */

@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import "../../styles.css"
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {categories, Category} from "../Categories";
 import {QBReaderSettings} from "../../main";
 import {SubjectButton} from "./ui/SubjectButton";
@@ -9,7 +9,8 @@ import {SubjectButton} from "./ui/SubjectButton";
 export function SubjectSelector(props: {
 	settings:QBReaderSettings,
 	upliftActiveCategories:(val:string[]) => void,
-	upliftActiveSubcats:(val:string[]) => void
+	upliftActiveSubcats:(val:string[]) => void,
+	active:boolean
 }) {
 
 	const [activeCategories, setActiveCategories] =
@@ -54,18 +55,11 @@ export function SubjectSelector(props: {
 		props.upliftActiveSubcats(activeSubcats)
 	}, [activeSubcats])
 
-	const [categorySelectorActive, setCategorySelectorActive] = useState(false)
 
 	return (
 		<div>
-			<button
-				onClick={() => setCategorySelectorActive(!categorySelectorActive)}
-				className={categorySelectorActive ? "mod-cta" : ""}
-			>
-				Categories
-			</button>
 
-			<div className={`flex cat-selector-container ${!categorySelectorActive ? "shrink-cat-select" : ""}`}>
+			<div className={`flex cat-selector-container ${!props.active ? "shrink-cat-select" : ""}`}>
 
 				<div className={"category-flex"}>
 					<h2>Categories</h2>

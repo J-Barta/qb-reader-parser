@@ -6,6 +6,7 @@ import {SubjectSelector} from "./SubjectSelector";
 import {useState} from "react";
 import TossupDisplay from "./TossupDisplay";
 import {QBReaderSettings} from "../../main";
+import {difficulties, difficulty} from "../Difficulties";
 
 export type Tossup = {
 	question:string,
@@ -25,6 +26,10 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 
 	const [activeCategories, setActiveCategories] = useState<string[]>(props.settings.activeCats)
 	const [activeSubcats, setActiveSubcats] = useState<string[]>([])
+	const [catSelectActive, setCatSelectActive] = useState(false)
+
+	const [activeDifficulties, setActiveDifficulties] = useState<number[]>([])
+	const [diffDropdownActive, setDiffDropdownActive] = useState(false)
 
 	const [searchType, setSearchType] = useState("all")
 
@@ -32,26 +37,29 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 
     const file:TFile = workspace.getActiveFile()!;
 
+	const handleDiffChange = (val:boolean, diff:difficulty) => {
+		if(val) {
+			activeDifficulties.push(diff.level)
+
+			setActiveDifficulties([...activeDifficulties])
+		} else {
+			setActiveDifficulties(activeDifficulties.filter(ele => diff.level !== ele))
+		}
+	}
+
 	const pullQuestions = () => {
 
-		Pull("query", [
-				{
-					key: "queryString",
-					val: questionQuery
-				},
-				{
-					key: "searchType",
-					val: searchType
-				},
-				{
-					key: "categories",
-					val: activeCategories.reduce((acc, e) => acc+","+e, "")
-				},
-				{
-					key: "subcategories",
-					val: activeSubcats.reduce((acc, e) => acc+","+e, "")
-				}
+		updateCatSelect(false)
+		updateDiffSelector(false)
 
+		const diffsToUse = activeDifficulties.length > 0 ? activeDifficulties : difficulties.map(e => e.level)
+
+		Pull("query", [
+				{key: "queryString", val: questionQuery},
+				{key: "searchType", val: searchType},
+				{key: "categories", val: activeCategories.reduce((acc, e) => acc+","+e, "")},
+				{key: "subcategories", val: activeSubcats.reduce((acc, e) => acc+","+e, "")},
+				{key: "difficulty", val: diffsToUse.reduce((acc, e) => acc+","+e, "")}
 			], (data) => {
 				const questionContent:Tossup[] = data.tossups.questionArray.map((e:any):Tossup => {
 					return {
@@ -70,6 +78,18 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 		)
 	}
 
+	const updateDiffSelector = (val:boolean) => {
+		setDiffDropdownActive(val)
+
+		if(val) setCatSelectActive(false)
+	}
+
+	const updateCatSelect = (val:boolean) => {
+		setCatSelectActive(val)
+
+		if(val) setDiffDropdownActive(false)
+	}
+
     return <div
 		onKeyDown={(e) => {
 			if (e.key === "Enter") {
@@ -77,13 +97,15 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 			}
 		}}
 		tabIndex={0}
+		className={"main-container"}
 		>
 
 		<h1>{file.basename} QB Reader Import</h1>
 
-		<div className={"white-background"}>
+		<div className={"input-container"}>
 
 			<input
+				className={"query"}
 				spellCheck={false}
 				type={"text"}
 				placeholder={"Search Query"}
@@ -93,20 +115,58 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 				}}
 			/>
 
-			<p>Search Type</p>
-			<select
-				className={"dropdown"}
-				onChange={(e) => setSearchType(e.target.value)}
-				value={searchType}
-			>
-				<option value={"all"}>All Text</option>
-				<option value={"question"}>Question</option>
-				<option value={"answer"}>Answer</option>
-			</select>
+			<div className={"input-row"}>
+				<select
+					className={"dropdown"}
+					onChange={(e) => setSearchType(e.target.value)}
+					value={searchType}
+				>
+					<option value={"all"}>All Text</option>
+					<option value={"question"}>Question</option>
+					<option value={"answer"}>Answer</option>
+				</select>
 
-			<SubjectSelector settings={props.settings} upliftActiveCategories={setActiveCategories} upliftActiveSubcats={setActiveSubcats}/>
+				<div className={"difficulty-container"}>
 
-			<button className={"mod-cta"} onClick={pullQuestions}>Search</button>
+					<button
+						className={`toggle-button ${diffDropdownActive ? "mod-cta" : ""}`}
+						onClick={() => updateDiffSelector(!diffDropdownActive)}
+					>
+						Difficulties
+					</button>
+
+					<div className={"difficulty-dropdown " + (!diffDropdownActive ? "diff-drop-inactive" : "")} >
+						{
+							difficulties.map(e => {
+								const active = activeDifficulties.includes(e.level);
+								return <div
+									className={"difficulty-selector " + (active ? "diff-item-active" : "") }
+									onClick={() => handleDiffChange(!active, e)}
+									key={e.name}
+								>
+										<input
+											type={"checkbox"}
+											checked={active}
+											readOnly={true}
+										/>
+									<p className={"difficulty-text"}>{e.level}: {e.name}</p>
+								</div>
+							})
+						}
+					</div>
+					<button
+						onClick={() => updateCatSelect(!catSelectActive)}
+						className={"toggle-button " + (catSelectActive ? " mod-cta " : " ")}
+					>
+						Categories
+					</button>
+
+					<button className={"mod-cta"} onClick={pullQuestions}>Search</button>
+
+				</div>
+			</div>
+
+			<SubjectSelector settings={props.settings} active={catSelectActive} upliftActiveCategories={setActiveCategories} upliftActiveSubcats={setActiveSubcats}/>
 		</div>
 		<div>
 			{
