@@ -72,11 +72,11 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 
     return <div
 		onKeyDown={(e) => {
-			console.log("keydown enter?")
 			if (e.key === "Enter") {
 				pullQuestions();
 			}
 		}}
+		tabIndex={0}
 		>
 
 		<h1>{file.basename} QB Reader Import</h1>
