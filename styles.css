@@ -1,6 +1,14 @@
-.test-class-name {
+.cat-selector-container {
 	display: flex;
 	justify-content: space-around;
+
+	transition: 0.25s;
+	height: 50vh;
+	overflow: scroll;
+}
+
+.shrink-cat-select {
+	height: 0;
 }
 
 .white-background {
