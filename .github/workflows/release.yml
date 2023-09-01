@@ -40,17 +40,3 @@ jobs:
                     --title="$tag" \
                     --draft \
                     main.js manifest.json styles.css ${{ github.event.repository.name }}.zip
-
-    generate-changelog:
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v2
-                with:
-                    fetch-depth: 0
-            -   uses: BobAnkh/auto-generate-changelog@v1.2.5
-                with:
-                    REPO_NAME: 'J-Barta/qb-reader-parser'
-                    ACCESS_TOKEN: ${{secrets.GITHUB_TOKEN}}
-                    PATH: 'CHANGELOG.md'
-                    COMMIT_MESSAGE: 'docs(CHANGELOG): update release notes'
-                    TYPE: 'feat:Feature,fix:Bug Fixes,docs:Documentation,refactor:Refactor,perf:Performance Improvements'
