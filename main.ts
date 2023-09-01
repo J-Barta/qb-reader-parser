@@ -7,7 +7,6 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Parse out unnecessary whitespace
 //TODO: Settings for cloze format
 //TODO: Bonus-ing?
-//TODO: Jump to top button
 //TODO: Show loading icon when loading questions
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
 //TODO: Ctrl + F (scrapped for now)

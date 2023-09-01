@@ -3,11 +3,12 @@ import { useApp } from "src/QBREaderView";
 import { TFile } from "obsidian";
 import * as React from "react";
 import {SubjectSelector} from "./SubjectSelector";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import TossupDisplay from "./TossupDisplay";
 import {QBReaderSettings} from "../../main";
 import {difficulties, difficulty} from "../Difficulties";
-import {ClimbingBoxLoader, ClipLoader} from "react-spinners";
+import {ClipLoader} from "react-spinners";
+import {useIsVisible} from "../IntersectionHook";
 
 export type Tossup = {
 	question:string,
@@ -39,6 +40,9 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
     const file:TFile = workspace.getActiveFile()!;
 
 	const [loading, setLoading] = useState(false)
+
+	const titleRef = useRef(null)
+	const isTitleVisible = useIsVisible(titleRef)
 
 	const handleDiffChange = (val:boolean, diff:difficulty) => {
 		if(val) {
@@ -97,7 +101,6 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 
 		if(val) setDiffDropdownActive(false)
 	}
-
     return <div
 		onKeyDown={(e) => {
 			if (e.key === "Enter") {
@@ -108,7 +111,7 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 		className={"main-container"}
 		>
 
-		<h1>{file.basename} QB Reader Import</h1>
+		<h1 id={"title-text"} ref={titleRef}>{file.basename} QB Reader Import</h1>
 
 		<div className={"input-container"}>
 
@@ -185,6 +188,13 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 				questions.map(e => <TossupDisplay key={e.question} tossup={e} file={file}/>)
 			}
 		</div>
+
+		<button
+			className={`top-scroll-button ${isTitleVisible ? "scroll-button-inactive" : ""}`}
+			onClick={() => document.getElementById("title-text")?.scrollIntoView({ behavior: "smooth"})}
+		>
+			<h1>Scroll To Top</h1>
+		</button>
 
     </div>
 }

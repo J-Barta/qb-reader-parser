@@ -1,5 +1,6 @@
 .main-container {
 	/*overflow-x: hidden;*/
+	/*overflow: scroll;*/
 }
 
 .cat-selector-container {
@@ -112,6 +113,18 @@
 	margin-top: 3vh;
 }
 
+.top-scroll-button {
+	position: absolute;
+	width: 15%;
+	bottom: 2%;
+	left: 42.5%;
+
+	transition: 0.25s;
+}
+
+.scroll-button-inactive {
+	bottom: -10%;
+}
 
 
 /*Popup stuff */
