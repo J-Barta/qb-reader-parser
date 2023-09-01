@@ -1,7 +1,7 @@
 {
 	"id": "qb-reader-parser",
 	"name": "QB Reader Parser",
-	"version": "1.3.4",
+	"version": "1.3.5",
 	"minAppVersion": "0.15.0",
 	"description": "Parse tossups from QB Reader into individual clues to send to Anki.",
 	"author": "Jedi_4",
