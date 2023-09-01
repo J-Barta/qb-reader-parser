@@ -7,6 +7,7 @@ import {useState} from "react";
 import TossupDisplay from "./TossupDisplay";
 import {QBReaderSettings} from "../../main";
 import {difficulties, difficulty} from "../Difficulties";
+import {ClimbingBoxLoader, ClipLoader} from "react-spinners";
 
 export type Tossup = {
 	question:string,
@@ -37,6 +38,8 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 
     const file:TFile = workspace.getActiveFile()!;
 
+	const [loading, setLoading] = useState(false)
+
 	const handleDiffChange = (val:boolean, diff:difficulty) => {
 		if(val) {
 			activeDifficulties.push(diff.level)
@@ -48,6 +51,9 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 	}
 
 	const pullQuestions = () => {
+
+		setLoading(true)
+		setQuestions([])
 
 		updateCatSelect(false)
 		updateDiffSelector(false)
@@ -74,6 +80,8 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 				});
 
 				setQuestions(questionContent);
+
+				setLoading(false)
 			}
 		)
 	}
@@ -164,6 +172,10 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings}) => {
 					<button className={"mod-cta"} onClick={pullQuestions}>Search</button>
 
 				</div>
+			</div>
+
+			<div className={"loading-container"}>
+				<ClipLoader color={"var(--interactive-accent)"} size={75} loading={loading}/>
 			</div>
 
 			<SubjectSelector settings={props.settings} active={catSelectActive} upliftActiveCategories={setActiveCategories} upliftActiveSubcats={setActiveSubcats}/>
