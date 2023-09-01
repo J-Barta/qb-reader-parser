@@ -5,11 +5,11 @@ import {categories} from "./src/Categories";
 import {around} from "monkey-around";
 export const AppContext = React.createContext<App | undefined>(undefined);
 
-//TODO: Parse out unnecessary whitespace
 //TODO: Settings for cloze format
 //TODO: Bonus-ing?
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
-//TODO: Ctrl + F (scrapped for now)
+//TODO: Fix number parsing (things like 0.13)
+//TODO: Fix issues with seeing text around finder window
 
 export interface QBReaderSettings {
 	activeCats: string[];
@@ -28,8 +28,6 @@ export default class QBReaderPlugin extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
-
-		console.log(this.settings)
 
 		this.registerView(
 			QB_READER_VIEW_TYPE,

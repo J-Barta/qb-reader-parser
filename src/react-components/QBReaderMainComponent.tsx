@@ -11,7 +11,6 @@ import {ClipLoader} from "react-spinners";
 import {useIsVisible} from "../IntersectionHook";
 import {SearchContext} from "./context";
 import {c} from "./helpers";
-import { t } from 'src/lang/helpers';
 import {Icon} from "./Icon/Icon";
 
 export type Tossup = {
@@ -22,6 +21,11 @@ export type Tossup = {
 	subcat: string,
 	setName: string,
 	difficulty: number,
+	matchID: number
+}
+
+const defaultTossup = {
+	matchID: -1
 }
 
 export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QBREaderView}) => {
@@ -84,6 +88,7 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 						subcat: e.subcategory,
 						setName: e.setName,
 						difficulty: e.difficulty,
+						...defaultTossup
 					}
 				});
 
@@ -113,6 +118,24 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 	const [isSearching, setIsSearching] = useState<boolean>(false);
 	const [debouncedSearchQuery, setDebouncedSearchQuery] =
 		useState<string>('');
+
+	const [searchMatches, setSearchMatches] = useState<Tossup[]>([])
+	const [currentMatchIndex, setCurrentMatchIndex] = useState(0)
+
+	const addSearchMatch = (tossup:Tossup) => {
+		searchMatches.push(tossup)
+
+		searchMatches.sort((e1, e2) => questions.indexOf(e1) - questions.indexOf(e2))
+
+		setSearchMatches([...searchMatches])
+
+		return searchMatches.indexOf(tossup)
+	}
+
+	const removeSearchMatch = (tossup:Tossup) => {
+		setSearchMatches(searchMatches.filter(e => e != tossup))
+	}
+
 
 	useEffect(() => {
 		const onSearchHotkey = (e: string) => {
@@ -153,6 +176,17 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 		};
 	}, [searchQuery, props.view]);
 
+	useEffect(() => {
+		if(searchMatches.length > 0) {
+			scrollMatchIntoView(0)
+		}
+	}, [searchMatches])
+
+	const scrollMatchIntoView = (index:number) => {
+		document.getElementById(`search-match-${index}`)?.scrollIntoView({behavior: "smooth"})
+
+	}
+
 
     return <SearchContext.Provider
 		value={
@@ -169,27 +203,61 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 					value={searchQuery}
 					onChange={(e) => {
 						setSearchQuery((e.target as HTMLInputElement).value);
+						setSearchMatches([])
 					}}
 					onKeyDown={(e) => {
 						if (e.key === 'Escape') {
 							setSearchQuery('');
 							setDebouncedSearchQuery('');
+							setCurrentMatchIndex(0);
 							(e.target as HTMLInputElement).blur();
 							setIsSearching(false);
 						}
 					}}
 					type="text"
 					className={c('filter-input')}
-					placeholder={t('Search...')}
+					placeholder={'Search...'}
 				/>
 				<a
 					className={`${c('search-cancel-button')} clickable-icon`}
 					onClick={() => {
+						if(currentMatchIndex > 0) {
+							setCurrentMatchIndex(currentMatchIndex-1)
+							scrollMatchIntoView(currentMatchIndex-1)
+						} else {
+							scrollMatchIntoView(currentMatchIndex)
+						}
+					}}
+					aria-label={'Next Match'}
+				>
+					<Icon name="lucide-chevron-up" />
+				</a>
+
+				<p>{currentMatchIndex+1} of {searchMatches.length}</p>
+
+				<a
+					className={`${c('search-cancel-button')} clickable-icon`}
+					onClick={() => {
+						if(currentMatchIndex < searchMatches.length-1) {
+							setCurrentMatchIndex(currentMatchIndex+1)
+							scrollMatchIntoView(currentMatchIndex+1)
+						} else {
+							scrollMatchIntoView(currentMatchIndex)
+						}
+					}}
+					aria-label={'Previous Match'}
+				>
+					<Icon name="lucide-chevron-down" />
+				</a>
+				<a
+					className={`${c('search-cancel-button')} clickable-icon`}
+					onClick={() => {
 						setSearchQuery('');
+						setCurrentMatchIndex(0)
 						setDebouncedSearchQuery('');
 						setIsSearching(false);
 					}}
-					aria-label={t('Cancel')}
+					aria-label={'Cancel'}
 				>
 					<Icon name="lucide-x" />
 				</a>
@@ -272,15 +340,24 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 					</div>
 				</div>
 
+				<SubjectSelector settings={props.settings} active={catSelectActive} upliftActiveCategories={setActiveCategories} upliftActiveSubcats={setActiveSubcats}/>
+
 				<div className={"loading-container"}>
 					<ClipLoader color={"var(--interactive-accent)"} size={75} loading={loading}/>
 				</div>
 
-				<SubjectSelector settings={props.settings} active={catSelectActive} upliftActiveCategories={setActiveCategories} upliftActiveSubcats={setActiveSubcats}/>
 			</div>
 			<div>
 				{
-					questions.map(e => <TossupDisplay key={e.question} tossup={e} file={file}/>)
+					questions.map(e => <TossupDisplay
+						key={e.question}
+						tossup={e}
+						file={file}
+						searchQuery={debouncedSearchQuery}
+						addToSearchResults={() => addSearchMatch(e)}
+						removeFromSearchResults={() => removeSearchMatch(e)}
+						matchID={searchMatches.indexOf(e)}
+					/>)
 				}
 			</div>
 

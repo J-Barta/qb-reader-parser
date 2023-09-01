@@ -44,7 +44,7 @@ export class QBREaderView extends ItemView {
 		) {
 			this.actionButtons['show-search'] =	this.addAction(
 				'lucide-search',
-				t('Search...'),
+				'Search...',
 				() => {
 					this.emitter.emit('hotkey', 'editor:open-search');
 				}

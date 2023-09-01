@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Tossup} from "./QBReaderMainComponent";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {TFile} from "obsidian";
 import {useApp} from "../QBREaderView";
 
@@ -8,16 +8,29 @@ type sentence = {
 	text:string,
 	pronoun:string
 }
-export default function TossupDisplay(props: {tossup:Tossup, file:TFile}) {
+
+type searchMatch  = {
+	index:number,
+	sentence:sentence
+}
+
+export default function TossupDisplay(props: {
+	tossup:Tossup,
+	file:TFile,
+	searchQuery:string,
+	addToSearchResults:(ele:HTMLElement) => void,
+	removeFromSearchResults:() => void,
+	matchID:number
+}) {
 
 	const {vault} = useApp()!;
+
+	const ref = useRef(null);
 
 	const sentenceSplitter = /[^.!?]*((?:[tT]his|[tT]hese) [\w-]+)[^.!?]*[.!?]["”]*/g;
 
 	const sentences:sentence[] = [...props.tossup.question.matchAll(sentenceSplitter)]
 		.map((e):sentence => {return {text: e[0], pronoun: e[1]}});
-
-
 
 	const [activeSentence, setActiveSentence]
 		= useState<sentence>({text:"", pronoun:""})
@@ -26,6 +39,8 @@ export default function TossupDisplay(props: {tossup:Tossup, file:TFile}) {
 
 	const rawAnswerParser = /[^[]*/g;
 	const rawPrimaryAnswer = [...props.tossup.rawAnswer.matchAll(rawAnswerParser)][0][0]
+
+	const [searchMatches, setSearchMatches] = useState<searchMatch[]>([])
 
 	const handlePopupOpen = (event: React.MouseEvent<HTMLElement>, sentence:sentence) => {
 		setPopupOpen(true);
@@ -42,12 +57,43 @@ export default function TossupDisplay(props: {tossup:Tossup, file:TFile}) {
 
 		// Append content (use \n for line break)
 		const newContent = content + "\n\n"
-			+sentence.text.replace(sentence.pronoun, `==${rawPrimaryAnswer}::${sentence.pronoun}==`);
+			+sentence.text.replace(sentence.pronoun, `==${rawPrimaryAnswer}::${sentence.pronoun}==`).trim();
 		// Update file you want to edit
 		await vault.modify(props.file, newContent);
 	}
 
-	return <div>
+	const getThisSearchMatch = (item:sentence) => {
+		return searchMatches.filter(e => e.sentence.text === item.text)[0]
+	}
+
+	//Search stuff
+	useEffect(() => {
+
+		const newMatches:searchMatch[] = []
+
+		if(props.searchQuery !== "") {
+			sentences.forEach((e) => {
+				const matchIndex = e.text.toLowerCase().indexOf(props.searchQuery.toLowerCase())
+
+				if(matchIndex !== -1) {
+
+					newMatches.push({index: matchIndex, sentence: e})
+				}
+			})
+		}
+
+		if(ref.current) {
+			if(newMatches.length > 0) {
+				props.addToSearchResults(ref.current)
+			} else  {
+				props.removeFromSearchResults()
+			}
+		}
+
+		setSearchMatches(newMatches)
+	}, [props.searchQuery])
+
+	return <div ref={ref} id={`search-match-${props.matchID}`}>
 		<p><b>{props.tossup.category}</b> - {props.tossup.subcat} - {props.tossup.setName} - {props.tossup.difficulty}</p>
 		<p>
 			{sentences.map(e =>
@@ -59,13 +105,32 @@ export default function TossupDisplay(props: {tossup:Tossup, file:TFile}) {
 					onClick={() => handleSentenceClick(e)}
 				>
 
-					{e.text.substring(0, e.text.indexOf(e.pronoun))}
-						<span className={"pronoun-replace"}>
-							<b>
-								{e.pronoun}
-							</b>
+					{searchMatches.filter(ele => ele.sentence.text === e.text).length > 0 ?
+						<span>
+							{e.text.substring(0, getThisSearchMatch(e).index)}
+
+							<span className={"search-output"}>
+									{e.text.substring(getThisSearchMatch(e).index, getThisSearchMatch(e).index + props.searchQuery.length)}
+							</span>
+							{
+								e.text.substring(
+								getThisSearchMatch(e).index+props.searchQuery.length)
+							}
+
+						</span> :
+						<span>
+							{e.text.substring(0, e.text.indexOf(e.pronoun))}
+
+							<span className={"pronoun-replace"}>
+								<b>
+									{e.pronoun}
+								</b>
+							</span>
+							{e.text.substring(e.text.indexOf(e.pronoun)+e.pronoun.length)}
 						</span>
-						{e.text.substring(e.text.indexOf(e.pronoun)+e.pronoun.length)}
+					}
+
+
 
 					{/*The Actual popup*/}
 					<span className={`popuptext ${popupOpen && activeSentence.text === e.text ? "show" : ""}`} id="myPopup">{activeSentence.pronoun} ➡ {rawPrimaryAnswer}</span>

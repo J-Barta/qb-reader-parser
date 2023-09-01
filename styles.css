@@ -42,6 +42,10 @@
 	color: black;
 }
 
+.search-output {
+	background-color: green;
+}
+
 .button-empty {
 	background-color: black;
 }
@@ -115,7 +119,7 @@
 
 .top-scroll-button {
 	position: absolute;
-	width: 15%;
+	/*width: 15%;*/
 	bottom: 2%;
 	left: 42.5%;
 
@@ -199,7 +203,7 @@ body .qb-reader__search-wrapper {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	z-index: 2;
+	z-index: 20;
 	background-color: var(--background-secondary);
 	border-bottom: 1px solid var(--background-modifier-border);
 }
