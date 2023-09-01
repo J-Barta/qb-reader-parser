@@ -2,6 +2,7 @@ import {App, Plugin, PluginSettingTab, Setting} from 'obsidian';
 import * as React from "react";
 import { QBREaderView, QB_READER_VIEW_TYPE } from "src/QBREaderView";
 import {categories} from "./src/Categories";
+import {around} from "monkey-around";
 export const AppContext = React.createContext<App | undefined>(undefined);
 
 //TODO: Parse out unnecessary whitespace
@@ -13,11 +14,13 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 export interface QBReaderSettings {
 	activeCats: string[];
 	disableCatColors: boolean;
+	showSearch: boolean;
 }
 
 const DEFAULT_SETTINGS: Partial<QBReaderSettings> = {
 	activeCats: categories.map(e => e.name),
-	disableCatColors: false
+	disableCatColors: false,
+	showSearch: true
 }
 
 export default class QBReaderPlugin extends Plugin {
@@ -25,6 +28,8 @@ export default class QBReaderPlugin extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
+
+		console.log(this.settings)
 
 		this.registerView(
 			QB_READER_VIEW_TYPE,
@@ -49,6 +54,8 @@ export default class QBReaderPlugin extends Plugin {
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new QBReaderSettingsTab(this.app, this));
+
+		this.registerMonkeyPatches()
 	}
 
 	onunload() {
@@ -74,6 +81,26 @@ export default class QBReaderPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+	}
+
+	registerMonkeyPatches() {
+		this.app.workspace.onLayoutReady(() => {
+			this.register(
+				around((this.app as any).commands, {
+					executeCommand(next) {
+						return function (command: any) {
+							const view = app.workspace.getActiveViewOfType(QBREaderView);
+
+							if (view && command?.id) {
+								view.emitter.emit('hotkey', command.id);
+							}
+
+							return next.call(this, command);
+						};
+					},
+				})
+			);
+		});
 	}
 }
 
@@ -101,6 +128,18 @@ class QBReaderSettingsTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				})
 			)
+
+		new Setting(containerEl)
+			.setName("Enable Search Tool")
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.showSearch)
+				.onChange(async (value) => {
+					this.plugin.settings.showSearch = value;
+
+					await this.plugin.saveSettings();
+				})
+			)
+
 
 		categories.forEach(e => {
 				new Setting(containerEl)

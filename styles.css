@@ -182,3 +182,24 @@
 	from {opacity: 0;}
 	to {opacity:1 ;}
 }
+
+/*Search stuff */
+
+body .qb-reader__search-wrapper {
+	background-color: var(--background-primary);
+	/*border-bottom: 1px solid var(--shade-plus-darker);*/
+}
+
+.qb-reader__search-wrapper {
+	width: 100%;
+	position: sticky;
+	top: 0;
+	left: 0;
+	padding: 10px 13px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	z-index: 2;
+	background-color: var(--background-secondary);
+	border-bottom: 1px solid var(--background-modifier-border);
+}
