@@ -6,7 +6,6 @@ import { Root, createRoot } from "react-dom/client";
 import {AppContext, QBReaderSettings} from "main";
 import {createEmitter, Emitter} from "./dnd/util/emitter";
 import {getParentWindow} from "./dnd/util/getWindow";
-import { t } from './lang/helpers';
 
 export const QB_READER_VIEW_TYPE = "qb-reader-view";
 
