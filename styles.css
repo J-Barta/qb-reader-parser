@@ -120,8 +120,8 @@
 .top-scroll-button {
 	position: absolute;
 	/*width: 15%;*/
-	bottom: 2%;
-	left: 42.5%;
+	bottom: 4%;
+	left: 70%;
 
 	transition: 0.25s;
 }
@@ -207,3 +207,5 @@ body .qb-reader__search-wrapper {
 	background-color: var(--background-secondary);
 	border-bottom: 1px solid var(--background-modifier-border);
 }
+
+

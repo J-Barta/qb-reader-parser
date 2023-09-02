@@ -53,13 +53,33 @@ export default function TossupDisplay(props: {
 
 	const handleSentenceClick = async (sentence:sentence) => {
 
-		const content = await vault.read(props.file);
+		let sentenceResult = sentence.text.replace("(*) ", "")
+		sentenceResult = sentenceResult.replace(sentence.pronoun, `==${rawPrimaryAnswer}::${sentence.pronoun}==`).trim()
+
+		let content = await vault.read(props.file);
+
+		content = content.replace(new RegExp(/Number of cards in this document: \*\*[0-9]+\*\*/g), "")
+		if(content[0] === "\n") content = content.substring(1)
+
+		const numberOfCards = (content.match(/==.+==/g) || []).length + 1
 
 		// Append content (use \n for line break)
-		const newContent = content + "\n\n"
-			+sentence.text.replace(sentence.pronoun, `==${rawPrimaryAnswer}::${sentence.pronoun}==`).trim();
+		const newContent =
+			numberOfCardsString(numberOfCards)
+			+ "\n"
+			+ content
+			+ "\n\n"
+			+ sentenceResult
+			+ "\n"
+			+ numberOfCardsString(numberOfCards)
+
+		;
 		// Update file you want to edit
 		await vault.modify(props.file, newContent);
+	}
+
+	const numberOfCardsString = (num:number) => {
+		return `Number of cards in this document: **${num}**`
 	}
 
 	const getThisSearchMatch = (item:sentence) => {

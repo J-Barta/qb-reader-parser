@@ -3,6 +3,8 @@ import * as React from "react";
 import { QBREaderView, QB_READER_VIEW_TYPE } from "src/QBREaderView";
 import {categories} from "./src/Categories";
 import {around} from "monkey-around";
+// import '/src/main.less';
+
 export const AppContext = React.createContext<App | undefined>(undefined);
 
 //TODO: Settings for cloze format
@@ -10,6 +12,11 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
 //TODO: Fix number parsing (things like 0.13)
 //TODO: Fix issues with seeing text around finder window
+//TODO: Parse out power marks ("(*)")
+//TODO: Find menu jumps to rando tossup when closing
+//TODO: Hotkey for jump to top
+//TODO: Close finder window on jumping to top
+//TODO: Don't send subcats if all subcats for a category are active
 
 export interface QBReaderSettings {
 	activeCats: string[];
