@@ -53,6 +53,8 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 	const titleRef = useRef(null)
 	const isTitleVisible = useIsVisible(titleRef)
 
+	const mainQueryRef = useRef<HTMLInputElement>(null);
+
 	const handleDiffChange = (val:boolean, diff:difficulty) => {
 		if(val) {
 			activeDifficulties.push(diff.level)
@@ -167,6 +169,9 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 	}, [isSearching]);
 
 	useEffect(() => {
+
+		setCurrentMatchIndex(0);
+
 		const win = props.view.getWindow();
 		const trimmed = searchQuery.trim();
 		let id: number;
@@ -185,14 +190,20 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 	}, [searchQuery, props.view]);
 
 	useEffect(() => {
-		if(searchMatches.length > 0) {
+		if(searchMatches.length > 0 && isSearching) {
 			scrollMatchIntoView(0)
 		}
 	}, [searchMatches])
 
 	const scrollMatchIntoView = (index:number) => {
-		document.getElementById(`search-match-${index}`)?.scrollIntoView({behavior: "smooth"})
+		document.getElementById(`search-match-${index}`)?.scrollIntoView({block:"center", behavior: "smooth"})
+	}
 
+	const closeSearchBar = () => {
+		setSearchQuery('');
+		setCurrentMatchIndex(0)
+		setDebouncedSearchQuery('');
+		setIsSearching(false);
 	}
 
 
@@ -204,77 +215,9 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 		}
 	>
 
-		{isSearching && (
-			<div className={c('search-wrapper')}>
-				<input
-					ref={searchRef}
-					value={searchQuery}
-					onChange={(e) => {
-						setSearchQuery((e.target as HTMLInputElement).value);
-						setSearchMatches([])
-					}}
-					onKeyDown={(e) => {
-						if (e.key === 'Escape') {
-							setSearchQuery('');
-							setDebouncedSearchQuery('');
-							setCurrentMatchIndex(0);
-							(e.target as HTMLInputElement).blur();
-							setIsSearching(false);
-						}
-					}}
-					type="text"
-					className={c('filter-input')}
-					placeholder={'Search...'}
-				/>
-				<a
-					className={`${c('search-cancel-button')} clickable-icon`}
-					onClick={() => {
-						if(currentMatchIndex > 0) {
-							setCurrentMatchIndex(currentMatchIndex-1)
-							scrollMatchIntoView(currentMatchIndex-1)
-						} else {
-							scrollMatchIntoView(currentMatchIndex)
-						}
-					}}
-					aria-label={'Next Match'}
-				>
-					<Icon name="lucide-chevron-up" />
-				</a>
-
-				<p>{currentMatchIndex+1} of {searchMatches.length}</p>
-
-				<a
-					className={`${c('search-cancel-button')} clickable-icon`}
-					onClick={() => {
-						if(currentMatchIndex < searchMatches.length-1) {
-							setCurrentMatchIndex(currentMatchIndex+1)
-							scrollMatchIntoView(currentMatchIndex+1)
-						} else {
-							scrollMatchIntoView(currentMatchIndex)
-						}
-					}}
-					aria-label={'Previous Match'}
-				>
-					<Icon name="lucide-chevron-down" />
-				</a>
-				<a
-					className={`${c('search-cancel-button')} clickable-icon`}
-					onClick={() => {
-						setSearchQuery('');
-						setCurrentMatchIndex(0)
-						setDebouncedSearchQuery('');
-						setIsSearching(false);
-					}}
-					aria-label={'Cancel'}
-				>
-					<Icon name="lucide-x" />
-				</a>
-			</div>
-		)}
-
 		<div
 			onKeyDown={(e) => {
-				if (e.key === "Enter") {
+				if (e.key === "Enter" && document.activeElement !== searchRef.current) {
 					pullQuestions();
 				}
 			}}
@@ -282,11 +225,77 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 			className={"main-container"}
 			>
 
+			{isSearching && (
+				<div className={c('search-wrapper')}>
+					<input
+						ref={searchRef}
+						value={searchQuery}
+						onChange={(e) => {
+							setSearchQuery((e.target as HTMLInputElement).value);
+							setSearchMatches([])
+						}}
+						onKeyDown={(e) => {
+							if (e.key === 'Escape') {
+								setSearchQuery('');
+								setDebouncedSearchQuery('');
+								setCurrentMatchIndex(0);
+								(e.target as HTMLInputElement).blur();
+								setIsSearching(false);
+							}
+						}}
+						type="text"
+						className={c('filter-input')}
+						placeholder={'Search...'}
+					/>
+					<a
+						className={`${c('search-cancel-button')} clickable-icon`}
+						onClick={() => {
+							if(currentMatchIndex > 0) {
+								setCurrentMatchIndex(currentMatchIndex-1)
+								scrollMatchIntoView(currentMatchIndex-1)
+							} else {
+								scrollMatchIntoView(currentMatchIndex)
+							}
+						}}
+						aria-label={'Next Match'}
+					>
+						<Icon name="lucide-chevron-up" />
+					</a>
+
+					<p>{currentMatchIndex+1} of {searchMatches.length}</p>
+
+					<a
+						className={`${c('search-cancel-button')} clickable-icon`}
+						onClick={() => {
+							if(currentMatchIndex < searchMatches.length-1) {
+								setCurrentMatchIndex(currentMatchIndex+1)
+								scrollMatchIntoView(currentMatchIndex+1)
+							} else {
+								scrollMatchIntoView(currentMatchIndex)
+							}
+						}}
+						aria-label={'Previous Match'}
+					>
+						<Icon name="lucide-chevron-down" />
+					</a>
+					<a
+						className={`${c('search-cancel-button')} clickable-icon`}
+						onClick={() => {
+							closeSearchBar();
+						}}
+						aria-label={'Cancel'}
+					>
+						<Icon name="lucide-x" />
+					</a>
+				</div>
+			)}
+
 			<h1 id={"title-text"} ref={titleRef}>{file.basename} QB Reader Import</h1>
 
 			<div className={"input-container"}>
 
 				<input
+					ref={mainQueryRef}
 					className={"query"}
 					spellCheck={false}
 					type={"text"}
@@ -369,13 +378,17 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 				}
 			</div>
 
-			<button
-				className={`top-scroll-button ${isTitleVisible ? "scroll-button-inactive" : ""}`}
-				onClick={() => document.getElementById("title-text")?.scrollIntoView({ behavior: "smooth"})}
-			>
-				<h1>Scroll To Top</h1>
-			</button>
 		</div>
+
+		<button
+			className={`top-scroll-button ${isTitleVisible ? "scroll-button-inactive" : ""}`}
+			onClick={() => {
+				closeSearchBar()
+				mainQueryRef.current?.focus();
+			}}
+		>
+			<h1>Scroll To Top</h1>
+		</button>
 
 	</SearchContext.Provider>
 }

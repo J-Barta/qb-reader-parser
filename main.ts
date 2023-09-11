@@ -13,9 +13,8 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Fix number parsing (things like 0.13)
 //TODO: Fix issues with seeing text around finder window
 //TODO: Parse out power marks ("(*)")
-//TODO: Find menu jumps to rando tossup when closing
 //TODO: Hotkey for jump to top
-//TODO: Close finder window on jumping to top
+//TODO: Setting for number to load
 
 export interface QBReaderSettings {
 	activeCats: string[];

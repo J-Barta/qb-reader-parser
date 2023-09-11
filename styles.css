@@ -1,6 +1,6 @@
 .main-container {
-	/*overflow-x: hidden;*/
 	/*overflow: scroll;*/
+	position: relative;
 }
 
 .cat-selector-container {
@@ -195,17 +195,20 @@ body .qb-reader__search-wrapper {
 }
 
 .qb-reader__search-wrapper {
-	width: 100%;
-	position: sticky;
-	top: 0;
-	left: 0;
+	/*width: 60%;*/
+	position: fixed;
+	top: calc(var(--header-height) - 6px);
+	right: 0;
 	padding: 10px 13px;
-	display: flex;
+	display: inline-flex;
 	justify-content: flex-end;
 	align-items: center;
 	z-index: 20;
 	background-color: var(--background-secondary);
 	border-bottom: 1px solid var(--background-modifier-border);
+	border-left: 1px solid var(--background-modifier-border);
+
+	border-bottom-left-radius: 2vh;
 }
 
 
