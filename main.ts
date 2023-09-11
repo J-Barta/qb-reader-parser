@@ -12,7 +12,6 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
 //TODO: Fix number parsing (things like 0.13)
 //TODO: Fix issues with seeing text around finder window
-//TODO: Parse out power marks ("(*)")
 //TODO: Hotkey for jump to top
 //TODO: Setting for number to load
 
