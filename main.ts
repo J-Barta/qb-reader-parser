@@ -16,7 +16,6 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Find menu jumps to rando tossup when closing
 //TODO: Hotkey for jump to top
 //TODO: Close finder window on jumping to top
-//TODO: Don't send subcats if all subcats for a category are active
 
 export interface QBReaderSettings {
 	activeCats: string[];

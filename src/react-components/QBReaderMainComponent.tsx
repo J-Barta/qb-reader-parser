@@ -12,6 +12,7 @@ import {useIsVisible} from "../IntersectionHook";
 import {SearchContext} from "./context";
 import {c} from "./helpers";
 import {Icon} from "./Icon/Icon";
+import {categories} from "../Categories";
 
 export type Tossup = {
 	question:string,
@@ -72,11 +73,18 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 
 		const diffsToUse = activeDifficulties.length > 0 ? activeDifficulties : difficulties.map(e => e.level)
 
+		const availableSubcats:string[] = categories.filter(e => activeCategories.includes(e.name)).reduce((acc:string[], ele) => {
+			acc.push(...ele.subcats)
+			return acc;
+		}, [])
+
+		const sendSubcats = availableSubcats.length !== activeSubcats.length
+
 		Pull("query", [
 				{key: "queryString", val: questionQuery},
 				{key: "searchType", val: searchType},
 				{key: "categories", val: activeCategories.reduce((acc, e) => acc+","+e, "")},
-				{key: "subcategories", val: activeSubcats.reduce((acc, e) => acc+","+e, "")},
+				{key: "subcategories", val: sendSubcats ? activeSubcats.reduce((acc, e) => acc+","+e, "") : ""},
 				{key: "difficulties", val: diffsToUse.reduce((acc, e) => acc+","+e, "")}
 			], (data) => {
 				const questionContent:Tossup[] = data.tossups.questionArray.map((e:any):Tossup => {
