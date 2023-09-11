@@ -61,7 +61,7 @@ export default function TossupDisplay(props: {
 		content = content.replace(new RegExp(/Number of cards in this document: \*\*[0-9]+\*\*/g), "")
 		if(content[0] === "\n") content = content.substring(1)
 
-		const numberOfCards = (content.match(/==.+==/g) || []).length + 1
+		const numberOfCards = (content.match(/==.+?==/g) || []).length + 1
 
 		// Append content (use \n for line break)
 		const newContent =
