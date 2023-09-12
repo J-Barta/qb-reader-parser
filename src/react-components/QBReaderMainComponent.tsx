@@ -13,7 +13,6 @@ import {SearchContext} from "./context";
 import {c} from "./helpers";
 import {Icon} from "./Icon/Icon";
 import {categories} from "../Categories";
-import {number} from "prop-types";
 
 export type Tossup = {
 	question:string,
@@ -43,7 +42,7 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 	const [activeDifficulties, setActiveDifficulties] = useState<number[]>([])
 	const [diffDropdownActive, setDiffDropdownActive] = useState(false)
 
-	const [numberToLoad, setNumberToLoad] = useState(25)
+	const [numberToLoad, setNumberToLoad] = useState(props.settings.defaultNumberQuestions)
 
 	const [searchType, setSearchType] = useState("all")
 

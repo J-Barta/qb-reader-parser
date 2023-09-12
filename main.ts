@@ -11,18 +11,20 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
 //TODO: Fix number parsing (things like 0.13)
 //TODO: Hotkey for jump to top
-//TODO: Setting for number to load
+//TODO: Setting for default number of tossups
+//TODO: Remove option to disable search bar
+
 
 export interface QBReaderSettings {
 	activeCats: string[];
 	disableCatColors: boolean;
-	showSearch: boolean;
+	defaultNumberQuestions: number;
 }
 
 const DEFAULT_SETTINGS: Partial<QBReaderSettings> = {
 	activeCats: categories.map(e => e.name),
 	disableCatColors: false,
-	showSearch: true
+	defaultNumberQuestions: 25,
 }
 
 export default class QBReaderPlugin extends Plugin {
@@ -130,16 +132,23 @@ class QBReaderSettingsTab extends PluginSettingTab {
 			)
 
 		new Setting(containerEl)
-			.setName("Enable Search Tool")
-			.addToggle(toggle => toggle
-				.setValue(this.plugin.settings.showSearch)
+			.setName("Default Number of Tossups to load")
+			.setDesc("Max: 10K")
+			.addText(text => text
+				.setValue(this.plugin.settings.defaultNumberQuestions.toString())
 				.onChange(async (value) => {
-					this.plugin.settings.showSearch = value;
+					let numberVal = parseInt(value)
+					if(numberVal) {
+						if(numberVal > 10000) numberVal = 10000
 
-					await this.plugin.saveSettings();
+						this.plugin.settings.defaultNumberQuestions = numberVal
+					} else if(value === "") {
+						this.plugin.settings.defaultNumberQuestions = 0
+					}
+
+					await this.plugin.saveSettings()
 				})
 			)
-
 
 		categories.forEach(e => {
 				new Setting(containerEl)
