@@ -38,7 +38,6 @@ export class QBREaderView extends ItemView {
   initHeaderButtons() {
 
 		if (
-			this.settings.showSearch &&
 			!this.actionButtons['show-search']
 		) {
 			this.actionButtons['show-search'] =	this.addAction(
@@ -49,7 +48,6 @@ export class QBREaderView extends ItemView {
 				}
 			);
 		} else if (
-			!this.settings.showSearch &&
 			this.actionButtons['show-search']
 		) {
 			this.actionButtons['show-search'].remove();

@@ -11,9 +11,6 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
 //TODO: Fix number parsing (things like 0.13)
 //TODO: Hotkey for jump to top
-//TODO: Setting for default number of tossups
-//TODO: Remove option to disable search bar
-
 
 export interface QBReaderSettings {
 	activeCats: string[];
