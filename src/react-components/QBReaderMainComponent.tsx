@@ -13,6 +13,7 @@ import {SearchContext} from "./context";
 import {c} from "./helpers";
 import {Icon} from "./Icon/Icon";
 import {categories} from "../Categories";
+import {number} from "prop-types";
 
 export type Tossup = {
 	question:string,
@@ -41,6 +42,8 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 
 	const [activeDifficulties, setActiveDifficulties] = useState<number[]>([])
 	const [diffDropdownActive, setDiffDropdownActive] = useState(false)
+
+	const [numberToLoad, setNumberToLoad] = useState(25)
 
 	const [searchType, setSearchType] = useState("all")
 
@@ -87,7 +90,8 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 				{key: "searchType", val: searchType},
 				{key: "categories", val: activeCategories.reduce((acc, e) => acc+","+e, "")},
 				{key: "subcategories", val: sendSubcats ? activeSubcats.reduce((acc, e) => acc+","+e, "") : ""},
-				{key: "difficulties", val: diffsToUse.reduce((acc, e) => acc+","+e, "")}
+				{key: "difficulties", val: diffsToUse.reduce((acc, e) => acc+","+e, "")},
+				{key: "maxReturnLength", val: numberToLoad.toString()}
 			], (data) => {
 				const questionContent:Tossup[] = data.tossups.questionArray.map((e:any):Tossup => {
 					return {
@@ -307,6 +311,25 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 				/>
 
 				<div className={"input-row"}>
+					<p>Max questions</p>
+					<input
+						className={"num-questions"}
+						spellCheck={false}
+						type={"text"}
+						value={numberToLoad}
+						onChange={(event) => {
+
+							let numberVal = parseInt(event.target.value)
+							if(numberVal) {
+								if(numberVal > 10000) numberVal = 10000
+
+								setNumberToLoad(numberVal)
+							} else if(event.target.value === "") {
+								setNumberToLoad(0)
+							}
+
+						}}
+					/>
 					<select
 						className={"dropdown"}
 						onChange={(e) => setSearchType(e.target.value)}

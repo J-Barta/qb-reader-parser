@@ -33,6 +33,15 @@
 	overflow: visible;
 }
 
+.input-row p {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.num-questions {
+	width: 5vw;
+}
+
 .sentence {
 	transition: 0.25s;
 }

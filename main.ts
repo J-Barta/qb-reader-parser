@@ -3,7 +3,6 @@ import * as React from "react";
 import { QBREaderView, QB_READER_VIEW_TYPE } from "src/QBREaderView";
 import {categories} from "./src/Categories";
 import {around} from "monkey-around";
-// import '/src/main.less';
 
 export const AppContext = React.createContext<App | undefined>(undefined);
 
@@ -11,7 +10,6 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Bonus-ing?
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
 //TODO: Fix number parsing (things like 0.13)
-//TODO: Fix issues with seeing text around finder window
 //TODO: Hotkey for jump to top
 //TODO: Setting for number to load
 
