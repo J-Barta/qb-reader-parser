@@ -120,7 +120,7 @@ export default function TossupDisplay(props: {
 			{sentences.map(e =>
 				<span
 					key={e.text}
-					className="popup sentence"
+					className="qb-popup sentence"
 					onMouseEnter={(event) => handlePopupOpen(event, e)}
 					onMouseLeave={() => handlePopupClose()}
 					onClick={() => handleSentenceClick(e)}
@@ -154,7 +154,7 @@ export default function TossupDisplay(props: {
 
 
 					{/*The Actual popup*/}
-					<span className={`popuptext ${popupOpen && activeSentence.text === e.text ? "show" : ""}`} id="myPopup">{activeSentence.pronoun} ➡ {rawPrimaryAnswer}</span>
+					<span className={`qb-popup-text ${popupOpen && activeSentence.text === e.text ? "qb-show" : ""}`} id="myPopup">{activeSentence.pronoun} ➡ {rawPrimaryAnswer}</span>
 				</span>
 
 

@@ -295,11 +295,11 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 
 			<h1 id={"title-text"} ref={titleRef}>{file.basename} QB Reader Import</h1>
 
-			<div className={"input-container"}>
+			<div className={"qb-input-container"}>
 
 				<input
 					ref={mainQueryRef}
-					className={"query"}
+					className={"qb-query"}
 					spellCheck={false}
 					type={"text"}
 					placeholder={"Search Query"}
@@ -309,7 +309,7 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 					}}
 				/>
 
-				<div className={"input-row"}>
+				<div className={"qb-input-row"}>
 					<p>Max questions</p>
 					<input
 						className={"num-questions"}
