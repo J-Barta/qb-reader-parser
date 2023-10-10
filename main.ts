@@ -9,7 +9,6 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 //TODO: Settings for cloze format
 //TODO: Bonus-ing?
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
-//TODO: Fix number parsing (things like 0.13)
 //TODO: Hotkey for jump to top
 //TODO: highlight search query on jump to top
 //TODO: make number of cards display optional

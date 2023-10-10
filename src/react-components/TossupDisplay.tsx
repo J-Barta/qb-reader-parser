@@ -29,8 +29,18 @@ export default function TossupDisplay(props: {
 
 	const sentenceSplitter = /[^.!?]*((?:[tT]his|[tT]hese) [\w-]+)[^.!?]*[.!?]["”]*/g;
 
-	const sentences:sentence[] = [...props.tossup.question.matchAll(sentenceSplitter)]
+	//Replace problematic periods with random ascii characters
+	const currentTossupText:string = props.tossup.question
+		.replace(/([0-9]+).([0-9]+)/g, "$1ξ$2")
+		.replace(/([Mm]rs*)./g, "$1ξ")
+
+	const sentences:sentence[] = [...currentTossupText.matchAll(sentenceSplitter)]
 		.map((e):sentence => {return {text: e[0], pronoun: e[1]}});
+
+	//Switch those random ascii characters back to periods
+	sentences.forEach(e => {
+		e.text = e.text.replace("ξ", ".")
+	})
 
 	const [activeSentence, setActiveSentence]
 		= useState<sentence>({text:"", pronoun:""})
