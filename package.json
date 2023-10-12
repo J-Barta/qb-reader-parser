@@ -1,6 +1,6 @@
 {
 	"name": "qb-reader-parser",
-	"version": "1.6.4",
+	"version": "1.6.5",
 	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
 	"main": "main.js",
 	"scripts": {
