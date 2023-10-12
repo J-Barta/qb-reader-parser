@@ -396,6 +396,7 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 						addToSearchResults={() => addSearchMatch(e)}
 						removeFromSearchResults={() => removeSearchMatch(e)}
 						matchID={searchMatches.indexOf(e)}
+						displayNumberOfCardsInDoc={props.settings.numberOfCardsInDocument}
 					/>)
 				}
 			</div>
