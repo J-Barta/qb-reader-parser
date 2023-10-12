@@ -17,6 +17,7 @@ export interface QBReaderSettings {
 	activeCats: string[];
 	disableCatColors: boolean;
 	defaultNumberQuestions: number;
+	numberOfCardsInDocument:boolean;
 }
 
 const DEFAULT_SETTINGS: Partial<QBReaderSettings> = {
@@ -144,6 +145,19 @@ class QBReaderSettingsTab extends PluginSettingTab {
 						this.plugin.settings.defaultNumberQuestions = 0
 					}
 
+					await this.plugin.saveSettings()
+				})
+			)
+
+		new Setting(containerEl)
+			.setName("Number of Cards in Document")
+			.setDesc("Show 'Cards in this document: {x}' at the bottom and top of your documents")
+			.addToggle(toggle => toggle
+				.setValue(
+					this.plugin.settings.numberOfCardsInDocument
+				)
+				.onChange(async (value) => {
+					this.plugin.settings.numberOfCardsInDocument = value
 					await this.plugin.saveSettings()
 				})
 			)

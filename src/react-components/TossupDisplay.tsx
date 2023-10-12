@@ -20,7 +20,8 @@ export default function TossupDisplay(props: {
 	searchQuery:string,
 	addToSearchResults:(ele:HTMLElement) => void,
 	removeFromSearchResults:() => void,
-	matchID:number
+	matchID:number,
+	displayNumberOfCardsInDoc:boolean
 }) {
 
 	const {vault} = useApp()!;
@@ -75,7 +76,7 @@ export default function TossupDisplay(props: {
 		const numberOfCards = (content.match(/==.+?==/g) || []).length + 1
 
 		// Append content (use \n for line break)
-		const newContent =
+		const newContent = props.displayNumberOfCardsInDoc ?
 			numberOfCardsString(numberOfCards)
 			+ "\n"
 			+ content
@@ -83,7 +84,8 @@ export default function TossupDisplay(props: {
 			+ sentenceResult
 			+ "\n"
 			+ numberOfCardsString(numberOfCards)
-
+			:
+			content + "\n\n" + sentenceResult
 		;
 		// Update file you want to edit
 		await vault.modify(props.file, newContent);
