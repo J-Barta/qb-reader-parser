@@ -35,13 +35,16 @@ export default function TossupDisplay(props: {
 		.replace(/([0-9]+)\.([0-9]+)/g, "$1ξ$2")
 		.replace(/([Mm]rs*)\./g, "$1ξ")
 		.replace(/(vs*)\./g, "$1ξ")
+		.replace(/(?<![a-zA-Z])([a-zA-Z])\./g, "$1ξ")
+
+	console.log(currentTossupText)
 
 	const sentences:sentence[] = [...currentTossupText.matchAll(sentenceSplitter)]
 		.map((e):sentence => {return {text: e[0], pronoun: e[1]}});
 
 	//Switch those random ascii characters back to periods
 	sentences.forEach(e => {
-		e.text = e.text.replace("ξ", ".")
+		e.text = e.text.replaceAll("ξ", ".")
 	})
 
 	const [activeSentence, setActiveSentence]
