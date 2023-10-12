@@ -32,9 +32,9 @@ export default function TossupDisplay(props: {
 
 	//Replace problematic periods with random ascii characters
 	const currentTossupText:string = props.tossup.question
-		.replace(/([0-9]+).([0-9]+)/g, "$1ξ$2")
-		.replace(/([Mm]rs*)./g, "$1ξ")
-		.replace(/(vs*)./g, "$1ξ")
+		.replace(/([0-9]+)\.([0-9]+)/g, "$1ξ$2")
+		.replace(/([Mm]rs*)\./g, "$1ξ")
+		.replace(/(vs*)\./g, "$1ξ")
 
 	const sentences:sentence[] = [...currentTossupText.matchAll(sentenceSplitter)]
 		.map((e):sentence => {return {text: e[0], pronoun: e[1]}});
