@@ -8,7 +8,6 @@ export const AppContext = React.createContext<App | undefined>(undefined);
 
 //TODO: Bonus-ing?
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
-//TODO: Hotkey for jump to top
 //TODO: highlight search query on jump to top
 
 export interface QBReaderSettings {
@@ -45,6 +44,14 @@ export default class QBReaderPlugin extends Plugin {
 				}
 
 				return true;
+			}
+		})
+
+		this.addCommand({
+			id: "scroll-to-top",
+			name: "Scroll To Top",
+			callback: () => {
+
 			}
 		})
 

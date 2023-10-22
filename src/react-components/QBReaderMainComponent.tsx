@@ -55,6 +55,8 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 	const titleRef = useRef(null)
 	const isTitleVisible = useIsVisible(titleRef)
 
+	const scrollRef = useRef<HTMLButtonElement>(null)
+
 	const mainQueryRef = useRef<HTMLInputElement>(null);
 
 	const handleDiffChange = (val:boolean, diff:difficulty) => {
@@ -151,17 +153,19 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 
 
 	useEffect(() => {
-		const onSearchHotkey = (e: string) => {
-
+		const onHotkey = (e: string) => {
 			if (e === 'editor:open-search') {
 				setIsSearching((val) => !val);
+			} else if (e === "qb-reader-parser:scroll-to-top") {
+				scrollRef.current?.click();
+
 			}
 		};
 
-		props.view.emitter.on('hotkey', onSearchHotkey);
+		props.view.emitter.on('hotkey', onHotkey);
 
 		return () => {
-			props.view.emitter.off('hotkey', onSearchHotkey);
+			props.view.emitter.off('hotkey', onHotkey);
 		};
 	}, [props.view]);
 
@@ -408,6 +412,7 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 				closeSearchBar()
 				mainQueryRef.current?.focus();
 			}}
+			ref={scrollRef}
 		>
 			<h1>Scroll To Top</h1>
 		</button>

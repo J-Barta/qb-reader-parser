@@ -36,8 +36,6 @@ export default function TossupDisplay(props: {
 		.replace(/(vs*)\./g, "$1ξ")
 		.replace(/(?<![a-zA-Z])([a-zA-Z])\./g, "$1ξ")
 
-	console.log(currentTossupText)
-
 	const sentences:sentence[] = [...currentTossupText.matchAll(sentenceSplitter)]
 		.map((e):sentence => {return {text: e[0], pronoun: e[1]}});
 
