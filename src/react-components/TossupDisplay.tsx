@@ -21,7 +21,6 @@ export default function TossupDisplay(props: {
 	addToSearchResults:(ele:HTMLElement) => void,
 	removeFromSearchResults:() => void,
 	matchID:number,
-	displayNumberOfCardsInDoc:boolean
 }) {
 
 	const {vault} = useApp()!;
@@ -74,29 +73,16 @@ export default function TossupDisplay(props: {
 
 		let content = await vault.read(props.file);
 
+		//Parse out any extra "number of cards in this document" from previous versions
 		content = content.replace(new RegExp(/Number of cards in this document: \*\*[0-9]+\*\*/g), "")
 		if(content[0] === "\n") content = content.substring(1)
 
-		const numberOfCards = (content.match(/==.+?==/g) || []).length + 1
-
 		// Append content (use \n for line break)
-		const newContent = props.displayNumberOfCardsInDoc ?
-			numberOfCardsString(numberOfCards)
-			+ "\n"
-			+ content
-			+ "\n\n"
-			+ sentenceResult
-			+ "\n"
-			+ numberOfCardsString(numberOfCards)
-			:
+		const newContent =
 			content + "\n\n" + sentenceResult
 		;
 		// Update file you want to edit
 		await vault.modify(props.file, newContent);
-	}
-
-	const numberOfCardsString = (num:number) => {
-		return `Number of cards in this document: **${num}**`
 	}
 
 	const getThisSearchMatch = (item:sentence) => {

@@ -1,23 +1,20 @@
-import {App, Plugin, PluginSettingTab, Setting} from 'obsidian';
+import {App, Plugin, PluginSettingTab, Setting, TAbstractFile, TFile} from 'obsidian';
 import * as React from "react";
-import { QBREaderView, QB_READER_VIEW_TYPE } from "src/QBREaderView";
+import {QBREaderView, QB_READER_VIEW_TYPE} from "src/QBREaderView";
 import {categories} from "./src/Categories";
 import {around} from "monkey-around";
 
 export const AppContext = React.createContext<App | undefined>(undefined);
 
-//TODO: Settings for cloze format
 //TODO: Bonus-ing?
 //TODO: Part of speech parsing to determine if you should add an extra word to the "pronoun"
 //TODO: Hotkey for jump to top
 //TODO: highlight search query on jump to top
-//TODO: make number of cards display optional
 
 export interface QBReaderSettings {
 	activeCats: string[];
 	disableCatColors: boolean;
 	defaultNumberQuestions: number;
-	numberOfCardsInDocument:boolean;
 }
 
 const DEFAULT_SETTINGS: Partial<QBReaderSettings> = {
@@ -37,7 +34,6 @@ export default class QBReaderPlugin extends Plugin {
 			(leaf) => new QBREaderView(leaf, this.settings)
 		)
 
-
 		//The command to open the modal
 		this.addCommand({
 			id: "qb-reader",
@@ -56,7 +52,37 @@ export default class QBReaderPlugin extends Plugin {
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new QBReaderSettingsTab(this.app, this));
 
+		//Register display for number of cards in document
+		const item = this.addStatusBarItem()
+		item.createEl("span", {text: `-1 cards`})
+
+		this.updateCardNumber(item, this.app.workspace.getActiveFile() as TAbstractFile)
+
+		this.registerEvent(
+			this.app.vault.on("modify", async (file: TAbstractFile) => {
+				await this.updateCardNumber(item, file)
+			})
+		);
+
+		this.registerEvent(
+			this.app.workspace.on("file-open", async (file: TFile) => {
+				await this.updateCardNumber(item, file)
+			})
+		)
 		this.registerMonkeyPatches()
+	}
+
+	async updateCardNumber(item:HTMLElement, file:TAbstractFile)  {
+		const spanEle = item.getElementsByTagName("span")[0]
+		if(file instanceof TFile) {
+			const content = await this.app.vault.cachedRead(file);
+
+			const numberOfCards = (content.match(/==.+?==/g) || []).length
+
+			spanEle.setText(`${numberOfCards} cards`)
+		} else {
+			spanEle.setText("")
+		}
 	}
 
 	onunload() {
@@ -145,19 +171,6 @@ class QBReaderSettingsTab extends PluginSettingTab {
 						this.plugin.settings.defaultNumberQuestions = 0
 					}
 
-					await this.plugin.saveSettings()
-				})
-			)
-
-		new Setting(containerEl)
-			.setName("Number of Cards in Document")
-			.setDesc("Show 'Cards in this document: {x}' at the bottom and top of your documents")
-			.addToggle(toggle => toggle
-				.setValue(
-					this.plugin.settings.numberOfCardsInDocument
-				)
-				.onChange(async (value) => {
-					this.plugin.settings.numberOfCardsInDocument = value
 					await this.plugin.saveSettings()
 				})
 			)
