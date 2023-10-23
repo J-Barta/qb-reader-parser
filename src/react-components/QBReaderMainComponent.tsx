@@ -297,7 +297,7 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 				</div>
 			)}
 
-			<h1 id={"title-text"} ref={titleRef}>{file.basename} QB Reader Import</h1>
+			<h1 id={"title-text"} ref={titleRef}>{file.basename}</h1>
 
 			<div className={"qb-input-container"}>
 
