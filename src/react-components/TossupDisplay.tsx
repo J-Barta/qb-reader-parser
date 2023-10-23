@@ -3,6 +3,7 @@ import {Tossup} from "./QBReaderMainComponent";
 import {useEffect, useRef, useState} from "react";
 import {TFile} from "obsidian";
 import {useApp} from "../QBREaderView";
+import {difficulties} from "../Difficulties";
 
 type sentence = {
 	text:string,
@@ -115,7 +116,7 @@ export default function TossupDisplay(props: {
 	}, [props.searchQuery])
 
 	return <div ref={ref} id={`search-match-${props.matchID}`}>
-		<p><b>{props.tossup.category}</b> - {props.tossup.subcat} - {props.tossup.setName} - {props.tossup.difficulty}</p>
+		<p><b>{props.tossup.category}</b> - {props.tossup.subcat} - {props.tossup.setName} - {props.tossup.difficulty}: {difficulties.filter(e => e.level === props.tossup.difficulty)[0].name}</p>
 		<p>
 			{sentences.map(e =>
 				<span
