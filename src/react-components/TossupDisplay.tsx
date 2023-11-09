@@ -50,7 +50,7 @@ export default function TossupDisplay(props: {
 
 	const [popupOpen, setPopupOpen] = useState(false);
 
-	const rawAnswerParser = /[^[]*/g;
+	const rawAnswerParser = /[^[(]*/g;
 	const rawPrimaryAnswer = [...props.tossup.rawAnswer.matchAll(rawAnswerParser)][0][0]
 
 	const [searchMatches, setSearchMatches] = useState<searchMatch[]>([])
