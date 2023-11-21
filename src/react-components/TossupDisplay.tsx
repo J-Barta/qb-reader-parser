@@ -68,7 +68,7 @@ export default function TossupDisplay(props: {
 
 		let sentenceResult = sentence.text.replace("(*) ", "")
 		sentenceResult = sentenceResult.replace("For 10 points, ", "")
-		sentenceResult = sentenceResult.replace(new RegExp(/\(.+?\)/g), "")
+		sentenceResult = sentenceResult.replace(new RegExp(/[([].+?[)\]]/g), "")
 		sentenceResult = sentenceResult.replace(sentence.pronoun, `==${rawPrimaryAnswer}::${sentence.pronoun}==`).trim()
 
 		let content = await vault.read(props.file);
