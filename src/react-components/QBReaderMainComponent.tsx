@@ -98,6 +98,7 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 					return {
 						question: e.question,
 						answer: e.formatted_answer,
+						answer: e.answer_sanitized,
 						rawAnswer: e.answer,
 						category: e.category,
 						subcat: e.subcategory,
