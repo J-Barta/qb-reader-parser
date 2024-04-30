@@ -97,7 +97,6 @@ export const QBReaderMainComponent = (props: {settings:QBReaderSettings, view:QB
 				const questionContent:Tossup[] = data.tossups.questionArray.map((e:any):Tossup => {
 					return {
 						question: e.question,
-						answer: e.formatted_answer,
 						answer: e.answer_sanitized,
 						rawAnswer: e.answer,
 						category: e.category,
